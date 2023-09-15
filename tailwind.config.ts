@@ -17,12 +17,13 @@ module.exports = {
     },
     extend: {
       colors: {
+        mainBackground: "#11171F",
+        cardBackground: "#18181B",
+        titleHighlight: "#55B8A5",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
-        mainBackground: "#11171F",
-        cardBackground: "#18181B",
         foreground: "hsl(var(--foreground))",
         primary: {
           DEFAULT: "hsl(var(--primary))",
