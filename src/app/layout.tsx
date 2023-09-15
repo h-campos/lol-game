@@ -19,7 +19,7 @@ const RootLayout: Component<PropsWithChildren> = ({ children }) => {
   return (
     <html lang="en">
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-        <body className={cn("bg-white dark:bg-mainBackground p-10 flex justify-center items-center", os)}>
+        <body className={cn("bg-white dark:bg-zinc-950 p-10 flex justify-center items-center", os)}>
           {children}
         </body>
       </ThemeProvider>
