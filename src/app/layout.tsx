@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils/style/class";
 import { Open_Sans } from "next/font/google";
 import type { Metadata } from "next";
 import "./globals.css";
-import { ThemeProvider } from "@/lib/components/theme-provider";
+import { ThemeProvider } from "@/lib/components/ui/theme-provider";
 
 const os = Open_Sans({ subsets: ["latin"] });
 
@@ -19,7 +19,7 @@ const RootLayout: Component<PropsWithChildren> = ({ children }) => {
   return (
     <html lang="en">
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-        <body className={cn("bg-white dark:bg-zinc-950", os)}>
+        <body className={cn("bg-white dark:bg-mainBackground p-10 flex justify-center items-center", os)}>
           {children}
         </body>
       </ThemeProvider>

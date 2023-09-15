@@ -1,9 +1,11 @@
 import type { ReactElement } from "react";
 
-const Page = (): ReactElement => {
+const Home = (): ReactElement => {
   return (
-    <h1 className="text-black dark:text-white text-4xl text-center">Hello World</h1>
+    <div className="bg-red-500 w-2/4">
+
+    </div>
   );
 };
 
-export default Page;
+export default Home;
