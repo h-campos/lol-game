@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactElement } from "react";
-import { Card, CardHeader, CardTitle, CardDescription, CardFooter, CardContent } from "@/lib/components/ui/card";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/lib/components/ui/card";
 import { Button } from "@/lib/components/ui/button";
 import { Separator } from "@/lib/components/ui/separator";
 
@@ -26,9 +26,6 @@ const Home = (): ReactElement => {
             </div>
           </CardDescription>
         </CardContent>
-        <CardFooter>
-          This is the footer of the card
-        </CardFooter>
       </Card>
     </div>
   );
