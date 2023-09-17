@@ -7,7 +7,7 @@ import { Separator } from "@/lib/components/ui/separator";
 
 const Home = (): ReactElement => {
   return (
-    <div className="w-2/4 flex flex-col">
+    <div className="w-2/4 flex flex-col gap-2">
       <Card className="bg-cardBackground">
         <CardHeader>
           <CardTitle className="mb-2 font-medium">Welcome on <span className="font-bold text-titleHighlight">LOLGAMES</span></CardTitle>
@@ -25,6 +25,29 @@ const Home = (): ReactElement => {
               <Button status={"wip"} variant={"secondary"} disabled>Blurry Champions</Button>
             </div>
           </CardDescription>
+        </CardContent>
+      </Card>
+      <Card className="bg-cardBackground">
+        <CardHeader>
+          <CardTitle>Statistics</CardTitle>
+          <CardDescription>You can see here all of your stats on the games.</CardDescription>
+        </CardHeader>
+        <CardContent className="grid gap-4">
+          <div>
+            <div
+              className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0"
+            >
+              <span className="flex h-2 w-2 translate-y-1 rounded-full bg-emerald-400" />
+              <div className="space-y-1">
+                <p className="text-sm font-medium leading-none">
+                  Blurry Champions
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  Youve got a streak of 5 wins in a row 🔥
+                </p>
+              </div>
+            </div>
+          </div>
         </CardContent>
       </Card>
     </div>
