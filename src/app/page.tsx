@@ -4,6 +4,15 @@ import type { ReactElement } from "react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/lib/components/ui/card";
 import { Button } from "@/lib/components/ui/button";
 import { Separator } from "@/lib/components/ui/separator";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/lib/components/ui/tabs";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow
+} from "@/lib/components/ui/table";
 
 const Home = (): ReactElement => {
   return (
@@ -15,7 +24,7 @@ const Home = (): ReactElement => {
             Test your knowledge on the game League of Legends, battle your friends and see your score.
           </CardDescription>
         </CardHeader>
-        <Separator className="w-[95%] mx-auto" />
+        <Separator className="w-[94%] mx-auto" />
         <CardContent className="pt-6">
           <CardDescription>
           To start a game, please click on one of available below.
@@ -48,6 +57,41 @@ const Home = (): ReactElement => {
               </div>
             </div>
           </div>
+        </CardContent>
+      </Card>
+      <Card className="bg-cardBackground">
+        <CardHeader className="pb-4">
+          <CardTitle>Leaderboard</CardTitle>
+          <CardDescription>See who is the best player.</CardDescription>
+        </CardHeader>
+        <Separator className="w-[94%] mx-auto" />
+        <CardContent className="pt-4">
+          <Tabs defaultValue="blurryChampions">
+            <TabsList className="mb-2">
+              <TabsTrigger value="blurryChampions">Blurry Champions</TabsTrigger>
+              <TabsTrigger value="other1">Other</TabsTrigger>
+              <TabsTrigger value="other2">Other</TabsTrigger>
+            </TabsList>
+            <TabsContent value="blurryChampions">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Pseudo</TableHead>
+                    <TableHead>Actual streak</TableHead>
+                    <TableHead>Best streak</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  <TableRow>
+                    <TableCell className="font-bold">Anyonipolochon</TableCell>
+                    <TableCell>5</TableCell>
+                    <TableCell>12</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </TabsContent>
+            <TabsContent value="other1">Change your password here.</TabsContent>
+          </Tabs>
         </CardContent>
       </Card>
     </div>
