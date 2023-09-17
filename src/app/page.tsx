@@ -20,9 +20,9 @@ const Home = (): ReactElement => {
           <CardDescription>
           To start a game, please click on one of available below.
             <div className="mt-4 flex gap-4 flex-wrap">
-              <Button className="border-2 border-emerald-400" variant={"secondary"}>Blurry Champions</Button>
-              <Button className="border-2 border-red-400" variant={"secondary"} disabled>Blurry Champions</Button>
-              <Button className="border-2 border-yellow-400 border-dashed" variant={"secondary"} disabled>Blurry Champions</Button>
+              <Button status={"available"} variant={"secondary"}>Blurry Champions</Button>
+              <Button status={"unavailable"} variant={"secondary"} disabled>Blurry Champions</Button>
+              <Button status={"wip"} variant={"secondary"} disabled>Blurry Champions</Button>
             </div>
           </CardDescription>
         </CardContent>
