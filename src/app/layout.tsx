@@ -7,6 +7,7 @@ import { Open_Sans } from "next/font/google";
 import type { Metadata } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/lib/components/ui/theme-provider";
+import { Navbar } from "@/lib/components/navbar/navbar";
 
 const os = Open_Sans({ subsets: ["latin"] });
 
@@ -19,7 +20,8 @@ const RootLayout: Component<PropsWithChildren> = ({ children }) => {
   return (
     <html lang="en">
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-        <body className={cn("bg-white dark:bg-zinc-950 p-10 flex justify-center items-center", os)}>
+        <body className={cn("bg-white dark:bg-zinc-950 p-10 flex justify-center items-center flex-col", os)}>
+          <Navbar />
           {children}
         </body>
       </ThemeProvider>
