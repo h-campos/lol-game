@@ -13,6 +13,7 @@ import {
   TableHeader,
   TableRow
 } from "@/lib/components/ui/table";
+import Link from "next/link";
 
 const Home = (): ReactElement => {
   return (
@@ -29,7 +30,9 @@ const Home = (): ReactElement => {
           <CardDescription>
           To start a game, please click on one of available below.
             <div className="mt-4 flex gap-4 flex-wrap">
-              <Button status={"available"} variant={"secondary"}>Blurry Champions</Button>
+              <Link href="/blurry-champions">
+                <Button status={"available"} variant={"secondary"}>Blurry Champions</Button>
+              </Link>
               <Button status={"unavailable"} variant={"secondary"} disabled>Blurry Champions</Button>
               <Button status={"wip"} variant={"secondary"} disabled>Blurry Champions</Button>
             </div>
