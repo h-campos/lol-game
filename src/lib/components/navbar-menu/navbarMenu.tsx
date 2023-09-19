@@ -21,7 +21,7 @@ export const NavbarMenu = (): ReactElement => {
           <HamburgerMenuIcon />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent>
+      <DropdownMenuContent align="end">
         <DropdownMenuGroup>
           <Link href="/blurry-champions">
             <DropdownMenuItem>
