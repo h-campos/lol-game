@@ -3,10 +3,9 @@
 import { useState, type ReactElement } from "react";
 import { NavbarMenu } from "@/lib/components/navbar-menu/navbarMenu";
 import { Button } from "@/lib/components/ui/button";
-import { SunIcon, MoonIcon } from "@radix-ui/react-icons";
+import { ToggleTheme } from "../toggle-them/toggleTheme";
 
 export const Navbar = (): ReactElement => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const [isConnected, setIsConnected] = useState(true);
 
   return (
@@ -15,9 +14,7 @@ export const Navbar = (): ReactElement => {
       <div className="flex gap-2">
         {isConnected && (
           <>
-            <Button variant={"outline"} onClick={() => setIsDarkMode(!isDarkMode)}>
-              {isDarkMode ? <MoonIcon /> : <SunIcon />}
-            </Button>
+            <ToggleTheme />
             <NavbarMenu />
           </>
         )}
