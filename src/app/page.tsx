@@ -18,7 +18,7 @@ import Link from "next/link";
 const Home = (): ReactElement => {
   return (
     <div className="w-2/4 flex flex-col gap-2">
-      <Card className="bg-cardBackground">
+      <Card>
         <CardHeader>
           <CardTitle className="mb-2 font-medium">Welcome on <span className="font-bold text-titleHighlight">LOLGAMES</span></CardTitle>
           <CardDescription>
@@ -39,7 +39,7 @@ const Home = (): ReactElement => {
           </CardDescription>
         </CardContent>
       </Card>
-      <Card className="bg-cardBackground">
+      <Card>
         <CardHeader>
           <CardTitle>Statistics</CardTitle>
           <CardDescription>You can see here all of your stats on the games.</CardDescription>
@@ -62,7 +62,7 @@ const Home = (): ReactElement => {
           </div>
         </CardContent>
       </Card>
-      <Card className="bg-cardBackground">
+      <Card>
         <CardHeader className="pb-4">
           <CardTitle>Leaderboard</CardTitle>
           <CardDescription>See who is the best player.</CardDescription>
