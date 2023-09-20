@@ -19,7 +19,7 @@ import { Badge } from "@/lib/components/ui/badge";
 
 const BlurryChampions = (): ReactElement => {
   const [animate, setAnimate] = useState<boolean>(false);
-  const [attempt, setAttempt] = useState<number>(50);
+  const [blur, setBlur] = useState<number>(50);
   const [isWin, setIsWin] = useState<boolean>(false);
   const blurredChampion = BlurChampionStore((state) => state.blurredChampion);
   const setBlurredChampion = BlurChampionStore((state) => state.setBlurredChampion);
@@ -33,14 +33,14 @@ const BlurryChampions = (): ReactElement => {
     const formattedInputValue = formatName(input.value);
     if (formattedInputValue === answerBlurredChampion) {
       setIsWin(true);
-      setAttempt(0);
+      setBlur(0);
     } else {
-      setAttempt((current) => current - 10);
+      setBlur((current) => current - 10);
       setAnimate(true);
       setTimeout(() => {
         setAnimate(false);
       }, 500);
-      if (attempt === 10) {
+      if (blur === 10) {
         alert("You lose");
       }
     }
@@ -87,7 +87,7 @@ const BlurryChampions = (): ReactElement => {
                 width={150}
                 height={150}
                 alt="Square assets of a champion of league of legends"
-                style={{ filter: `blur(${attempt}px)` }}
+                style={{ filter: `blur(${blur}px)` }}
               />
             </div>
             <div className="flex items-center space-x-2">
