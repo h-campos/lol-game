@@ -1,24 +1,51 @@
 /* eslint-disable max-len */
 "use client";
 
-import { useState, type ReactElement, useEffect } from "react";
-import { Card, CardHeader, CardTitle, CardDescription } from "@/lib/components/ui/card";
-import { cn } from "@/lib/utils/style/class";
+import { useState, type ReactElement, useEffect, useRef } from "react";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/lib/components/ui/card";
+import { twMerge } from "tailwind-merge";
 import Image from "next/image";
 import { getChampionsAssets } from "@/lib/utils/functions/getChampionsAssets";
 import { extractChampionName } from "@/lib/utils/functions/extractChampionName";
 import { champions } from "@/lib/utils/data-lol/champions";
 import { BlurChampionStore } from "@/lib/utils/stores/blurChampionStore";
 import { AnswerBlurChampionStore } from "@/lib/utils/stores/answerBlurChampionStore";
+import { Input } from "@/lib/components/ui/input";
+import { Button } from "@/lib/components/ui/button";
 import { formatName } from "@/lib/utils/functions/formatName";
+import ConfettiExplosion from "react-confetti-explosion";
+import { Separator } from "@/lib/components/ui/separator";
+import { Badge } from "@/lib/components/ui/badge";
 
 const BlurryChampions = (): ReactElement => {
   const [animate, setAnimate] = useState<boolean>(false);
   const [attempt, setAttempt] = useState<number>(50);
+  const [isWin, setIsWin] = useState<boolean>(false);
   const blurredChampion = BlurChampionStore((state) => state.blurredChampion);
   const setBlurredChampion = BlurChampionStore((state) => state.setBlurredChampion);
   const setAnswerBlurredChampion = AnswerBlurChampionStore((state) => state.setAnswerBlurredChampion);
   const answerBlurredChampion = AnswerBlurChampionStore((state) => state.answerBlurredChampion);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleClick = (): void => {
+    const input = inputRef.current;
+    if (!input) throw new Error("Input is not defined");
+    const formattedInputValue = formatName(input.value);
+    if (formattedInputValue === answerBlurredChampion) {
+      setIsWin(true);
+      setAttempt(0);
+    } else {
+      setAttempt((current) => current - 10);
+      setAnimate(true);
+      setTimeout(() => {
+        setAnimate(false);
+      }, 500);
+      if (attempt === 10) {
+        alert("You lose");
+      }
+    }
+    input.value = "";
+  };
 
   useEffect(() => {
     const championSelected = getChampionsAssets(champions);
@@ -43,11 +70,15 @@ const BlurryChampions = (): ReactElement => {
       </Card>
       <Card>
         <CardHeader>
-          <div className="w-full flex justify-center items-center">
+          <div className="w-full flex justify-center items-center flex-col gap-4">
+            {isWin && (
+              <ConfettiExplosion particleCount={80} colors={["#63D5B7", "#66D5A7", "#6FD392", "#88CE8A"]} />
+            )}
             <div className={
-              cn(
+              twMerge(
                 "overflow-hidden flex items-center justify-center rounded-lg border border-neutral-200 bg-white text-neutral-950 shadow-sm dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-50 w-fit",
-                animate ? "animate-shaking border-red-500" : "border-white"
+                animate ? "animate-shaking dark:border-red-500 border-red-500" : "border-white",
+                isWin ? "border-green-500 dark:border-green-500" : "border-white",
               )
             }
             >
@@ -59,8 +90,52 @@ const BlurryChampions = (): ReactElement => {
                 style={{ filter: `blur(${attempt}px)` }}
               />
             </div>
+            <div className="flex items-center space-x-2">
+              <Input ref={inputRef} type="text" placeholder="Champion name..." />
+              <Button onClick={(e) => {
+                handleClick();
+                e.preventDefault();
+              }}>Submit</Button>
+            </div>
           </div>
         </CardHeader>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>Attempts</CardTitle>
+          <CardDescription>You can see here all your attempts for this games</CardDescription>
+        </CardHeader>
+        <Separator className="w-[94%] mx-auto" />
+        <CardContent className="pt-6">
+          <ul className="flex items-start gap-2 flex-col">
+            <li className="flex justify-between items-center w-full">
+              <div className="flex items-center gap-4">
+                <Image
+                  src={blurredChampion}
+                  width={40}
+                  height={40}
+                  alt="Square assets of a champion of league of legends"
+                  className="rounded-full border border-neutral-200 dark:border-neutral-800"
+                />
+                <span>Vayne</span>
+              </div>
+              <Badge variant="destructive">FAIL</Badge>
+            </li>
+            <li className="flex justify-between items-center w-full">
+              <div className="flex items-center gap-4">
+                <Image
+                  src={blurredChampion}
+                  width={40}
+                  height={40}
+                  alt="Square assets of a champion of league of legends"
+                  className="rounded-full border border-neutral-200 dark:border-neutral-800"
+                />
+                <span>Vayne</span>
+              </div>
+              <Badge variant="success">WIN</Badge>
+            </li>
+          </ul>
+        </CardContent>
       </Card>
     </div>
   );
