@@ -3,7 +3,7 @@
 import { useState, type ReactElement } from "react";
 import { NavbarMenu } from "@/lib/components/navbar-menu/navbarMenu";
 import { Button } from "@/lib/components/ui/button";
-import { ToggleTheme } from "../toggle-them/toggleTheme";
+import { ToggleTheme } from "../toggle-theme/toggleTheme";
 import Link from "next/link";
 
 export const Navbar = (): ReactElement => {

@@ -33,8 +33,6 @@ const Home = (): ReactElement => {
               <Link href="/blurry-champions">
                 <Button status={"available"} variant={"secondary"}>Blurry Champions</Button>
               </Link>
-              <Button status={"unavailable"} variant={"secondary"} disabled>Blurry Champions</Button>
-              <Button status={"wip"} variant={"secondary"} disabled>Blurry Champions</Button>
             </div>
           </CardDescription>
         </CardContent>
@@ -72,8 +70,6 @@ const Home = (): ReactElement => {
           <Tabs defaultValue="blurryChampions">
             <TabsList className="mb-2">
               <TabsTrigger value="blurryChampions">Blurry Champions</TabsTrigger>
-              <TabsTrigger value="other1">Other</TabsTrigger>
-              <TabsTrigger value="other2">Other</TabsTrigger>
             </TabsList>
             <TabsContent value="blurryChampions">
               <Table>
