@@ -14,6 +14,7 @@ import {
   TableRow
 } from "@/lib/components/ui/table";
 import Link from "next/link";
+import { gamesList } from "@/lib/utils/data/gamesList";
 
 const Home = (): ReactElement => {
   return (
@@ -30,9 +31,15 @@ const Home = (): ReactElement => {
           <CardDescription>
           To start a game, please click on one of available below.
             <div className="mt-4 flex gap-4 flex-wrap">
-              <Link href="/blurry-champions">
-                <Button status={"available"} variant={"secondary"}>Blurry Champions</Button>
-              </Link>
+              {gamesList.map((game, idx) => {
+                if (game.status === "wip" || game.status === "unavailable") {
+                  return <Button key={idx} status={game.status} variant={"secondary"} disabled>{game.visualName}</Button>;
+                } else {
+                  return <Link key={idx} href={game.path}>
+                    <Button status={game.status} variant={"secondary"}>{game.visualName}</Button>
+                  </Link>;
+                }
+              })}
             </div>
           </CardDescription>
         </CardContent>
@@ -67,11 +74,15 @@ const Home = (): ReactElement => {
         </CardHeader>
         <Separator className="w-[94%] mx-auto" />
         <CardContent className="pt-4">
-          <Tabs defaultValue="blurryChampions">
+          <Tabs defaultValue="blurry-champions">
             <TabsList className="mb-2">
-              <TabsTrigger value="blurryChampions">Blurry Champions</TabsTrigger>
+              {gamesList.map((game, idx) => (
+                <TabsTrigger key={idx} value={game.path}>
+                  {game.visualName}
+                </TabsTrigger>
+              ))}
             </TabsList>
-            <TabsContent value="blurryChampions">
+            <TabsContent value="blurry-champions">
               <Table>
                 <TableHeader>
                   <TableRow>

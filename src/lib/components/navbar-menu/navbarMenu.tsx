@@ -12,6 +12,7 @@ import {
 } from "@/lib/components/ui/dropdown-menu";
 import Link from "next/link";
 import { HamburgerMenuIcon, ExitIcon, Pencil1Icon } from "@radix-ui/react-icons";
+import { gamesList } from "@/lib/utils/data/gamesList";
 
 export const NavbarMenu = (): ReactElement => {
   return (
@@ -23,11 +24,15 @@ export const NavbarMenu = (): ReactElement => {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuGroup>
-          <Link href="/blurry-champions">
-            <DropdownMenuItem>
-                Blurry Champions
-            </DropdownMenuItem>
-          </Link>
+          {gamesList.map((game, idx) => {
+            if (game.status === "wip" || game.status === "unavailable") {
+              return  <DropdownMenuItem key={idx} disabled>{game.visualName}</DropdownMenuItem>;
+            } else {
+              return <Link key={idx} href={game.path}>
+                <DropdownMenuItem>{game.visualName}</DropdownMenuItem>
+              </Link>;
+            }
+          })}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
