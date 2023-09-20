@@ -15,22 +15,25 @@ import { Button } from "@/lib/components/ui/button";
 import { formatName } from "@/lib/utils/functions/formatName";
 import ConfettiExplosion from "react-confetti-explosion";
 import { Separator } from "@/lib/components/ui/separator";
-import { Badge } from "@/lib/components/ui/badge";
+import { Attempt } from "@/lib/components/attempt";
 
 const BlurryChampions = (): ReactElement => {
   const [animate, setAnimate] = useState<boolean>(false);
   const [blur, setBlur] = useState<number>(50);
   const [isWin, setIsWin] = useState<boolean>(false);
+  const [attempts, setAttempts] = useState<string[]>([]);
   const blurredChampion = BlurChampionStore((state) => state.blurredChampion);
   const setBlurredChampion = BlurChampionStore((state) => state.setBlurredChampion);
   const setAnswerBlurredChampion = AnswerBlurChampionStore((state) => state.setAnswerBlurredChampion);
   const answerBlurredChampion = AnswerBlurChampionStore((state) => state.answerBlurredChampion);
   const inputRef = useRef<HTMLInputElement>(null);
 
+
   const handleClick = (): void => {
     const input = inputRef.current;
     if (!input) throw new Error("Input is not defined");
     const formattedInputValue = formatName(input.value);
+    setAttempts((current) => [...current, formattedInputValue]);
     if (formattedInputValue === answerBlurredChampion) {
       setIsWin(true);
       setBlur(0);
@@ -107,33 +110,10 @@ const BlurryChampions = (): ReactElement => {
         </CardHeader>
         <Separator className="w-[94%] mx-auto" />
         <CardContent className="pt-6">
-          <ul className="flex items-start gap-2 flex-col">
-            <li className="flex justify-between items-center w-full">
-              <div className="flex items-center gap-4">
-                <Image
-                  src={blurredChampion}
-                  width={40}
-                  height={40}
-                  alt="Square assets of a champion of league of legends"
-                  className="rounded-full border border-neutral-200 dark:border-neutral-800"
-                />
-                <span>Vayne</span>
-              </div>
-              <Badge variant="destructive">FAIL</Badge>
-            </li>
-            <li className="flex justify-between items-center w-full">
-              <div className="flex items-center gap-4">
-                <Image
-                  src={blurredChampion}
-                  width={40}
-                  height={40}
-                  alt="Square assets of a champion of league of legends"
-                  className="rounded-full border border-neutral-200 dark:border-neutral-800"
-                />
-                <span>Vayne</span>
-              </div>
-              <Badge variant="success">WIN</Badge>
-            </li>
+          <ul className="flex items-start gap-2 flex-col-reverse">
+            {attempts.length > 0 ? attempts.map((attempt, index) => (
+              <Attempt key={index} championName={attempt} />
+            )) : (<span className="text-sm text-neutral-500 dark:text-neutral-400">No attempts for the momment</span>)}
           </ul>
         </CardContent>
       </Card>
