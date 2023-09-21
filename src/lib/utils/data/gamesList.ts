@@ -14,10 +14,5 @@ export const gamesList: GameList[] = [
     visualName: "Blurry Spells",
     path: "blurry-spells",
     status: "wip"
-  },
-  {
-    visualName: "Another One",
-    path: "another-one",
-    status: "unavailable"
   }
 ];
