@@ -21,6 +21,7 @@ const BlurryChampions = (): ReactElement => {
   const [animate, setAnimate] = useState<boolean>(false);
   const [blur, setBlur] = useState<number>(50);
   const [isWin, setIsWin] = useState<boolean>(false);
+  const [isLoose, setIsLoose] = useState<boolean>(false);
   const [attempts, setAttempts] = useState<string[]>([]);
   const blurredChampion = BlurChampionStore((state) => state.blurredChampion);
   const setBlurredChampion = BlurChampionStore((state) => state.setBlurredChampion);
@@ -44,7 +45,8 @@ const BlurryChampions = (): ReactElement => {
         setAnimate(false);
       }, 500);
       if (blur === 10) {
-        alert("You lose");
+        setBlur(0);
+        setIsLoose(true);
       }
     }
     input.value = "";
@@ -82,6 +84,7 @@ const BlurryChampions = (): ReactElement => {
                 "overflow-hidden flex items-center justify-center rounded-lg border border-neutral-200 bg-white text-neutral-950 shadow-sm dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-50 w-fit",
                 animate ? "animate-shaking dark:border-red-500 border-red-500" : "border-white",
                 isWin ? "border-green-500 dark:border-green-500" : "border-white",
+                isLoose ? "border-red-500 dark:border-red-500" : "border-white",
               )
             }
             >
