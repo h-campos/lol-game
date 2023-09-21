@@ -31,7 +31,6 @@ const BlurryChampions = (): ReactElement => {
   const inputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
-
   const handleClick = (): void => {
     const input = inputRef.current;
     if (!input) throw new Error("Input is not defined");
