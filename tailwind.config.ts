@@ -17,6 +17,7 @@ module.exports = {
     },
     extend: {
       colors: {
+        discord: "#7289da",
         mainBackground: "#11171F",
         cardBackground: "#18181B",
         titleHighlight: "#55B8A5",

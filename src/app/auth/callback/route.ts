@@ -14,5 +14,7 @@ export const GET = async(request: NextRequest): Promise<NextResponse> => {
     await supabase.auth.exchangeCodeForSession(code);
   }
 
-  return NextResponse.redirect(requestUrl.origin);
+  console.log("Redirecting to", requestUrl.origin);
+
+  return NextResponse.redirect(requestUrl.origin + "/home");
 };
