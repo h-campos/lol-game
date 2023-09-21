@@ -8,6 +8,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/lib/components/ui/theme-provider";
 import { Navbar } from "@/lib/components/navbar/navbar";
+import { Toaster } from "@/lib/components/ui/toaster";
 
 const os = Open_Sans({ subsets: ["latin"] });
 
@@ -23,6 +24,7 @@ const RootLayout: Component<PropsWithChildren> = ({ children }) => {
         <body className={cn("bg-white dark:bg-zinc-950 p-10 flex justify-center items-center flex-col", os)}>
           <Navbar />
           {children}
+          <Toaster />
         </body>
       </ThemeProvider>
     </html>

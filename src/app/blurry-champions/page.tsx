@@ -16,6 +16,7 @@ import { formatName } from "@/lib/utils/functions/formatName";
 import ConfettiExplosion from "react-confetti-explosion";
 import { Separator } from "@/lib/components/ui/separator";
 import { Attempt } from "@/lib/components/attempt";
+import { useToast } from "@/lib/utils/hooks/use-toasts";
 
 const BlurryChampions = (): ReactElement => {
   const [animate, setAnimate] = useState<boolean>(false);
@@ -28,6 +29,7 @@ const BlurryChampions = (): ReactElement => {
   const setAnswerBlurredChampion = AnswerBlurChampionStore((state) => state.setAnswerBlurredChampion);
   const answerBlurredChampion = AnswerBlurChampionStore((state) => state.answerBlurredChampion);
   const inputRef = useRef<HTMLInputElement>(null);
+  const { toast } = useToast();
 
 
   const handleClick = (): void => {
@@ -38,6 +40,11 @@ const BlurryChampions = (): ReactElement => {
     if (formattedInputValue === answerBlurredChampion) {
       setIsWin(true);
       setBlur(0);
+      toast({
+        title: "You win !",
+        description: "Congratulations, the champion was " + answerBlurredChampion + ". 🎊",
+        variant: "success"
+      });
     } else {
       setBlur((current) => current - 10);
       setAnimate(true);
@@ -47,6 +54,11 @@ const BlurryChampions = (): ReactElement => {
       if (blur === 10) {
         setBlur(0);
         setIsLoose(true);
+        toast({
+          title: "You loose...",
+          description: "Sorry you loose, the champion was " + answerBlurredChampion + ".",
+          variant: "destructive"
+        });
       }
     }
     input.value = "";
