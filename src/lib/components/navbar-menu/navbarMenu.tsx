@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client";
 
 import type { ReactElement } from "react";
@@ -15,10 +16,13 @@ import { HamburgerMenuIcon, ExitIcon, Pencil1Icon } from "@radix-ui/react-icons"
 import { gamesList } from "@/lib/utils/data/gamesList";
 import { useUserContext } from "@/lib/utils/contexts/user-provider";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
 
 export const NavbarMenu = (): ReactElement => {
   const supabase = createClientComponentClient();
-  const { setUser } = useUserContext();
+  const { user, setUser } = useUserContext();
+
+  console.log(user);
 
   return (
     <DropdownMenu>
@@ -28,6 +32,21 @@ export const NavbarMenu = (): ReactElement => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
+        <DropdownMenuGroup>
+          <DropdownMenuItem>
+            {user && user !== "loading" && (
+              <>
+                <Avatar>
+                  <AvatarImage src={user?.user_metadata?.avatar_url} alt="@shadcn" />
+                  <AvatarFallback>U</AvatarFallback>
+                </Avatar>
+                <span className="ml-2">{user?.user_metadata?.full_name}</span>
+              </>
+            )}
+
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
+        <DropdownMenuSeparator />
         <DropdownMenuGroup>
           {gamesList.map((game, idx) => {
             if (game.status === "wip" || game.status === "unavailable") {
