@@ -5,9 +5,11 @@ import { NavbarMenu } from "@/lib/components/navbar-menu/navbarMenu";
 import { Button } from "@/lib/components/ui/button";
 import { ToggleTheme } from "../toggle-theme/toggleTheme";
 import Link from "next/link";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 export const Navbar = (): ReactElement => {
-  const [isConnected, setIsConnected] = useState(true);
+  const supabase = createClientComponentClient();
+  const [isConnected, setIsConnected] = useState(false);
 
   return (
     <div className="text-white bg--500 w-full mb-10 flex justify-between items-center">
@@ -23,7 +25,11 @@ export const Navbar = (): ReactElement => {
         )}
         {!isConnected && (
           <>
-            <Button variant={"default"}>Log in</Button>
+            <Button variant={"default"} onClick={() => {
+              void supabase.auth.signInWithOAuth({ provider: "discord", options: {
+                redirectTo: `${window.location.origin}/auth/callback`
+              } });
+            }}>Log in</Button>
             <Button variant={"default"}>Sign up</Button>
           </>
         )}

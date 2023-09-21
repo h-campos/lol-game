@@ -13,8 +13,13 @@ import {
 import Link from "next/link";
 import { HamburgerMenuIcon, ExitIcon, Pencil1Icon } from "@radix-ui/react-icons";
 import { gamesList } from "@/lib/utils/data/gamesList";
+import { useUserContext } from "@/lib/utils/contexts/user-provider";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 export const NavbarMenu = (): ReactElement => {
+  const supabase = createClientComponentClient();
+  const { setUser } = useUserContext();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -41,7 +46,11 @@ export const NavbarMenu = (): ReactElement => {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={() => {
+          void supabase.auth.signOut().then(() => {
+            setUser(null);
+          });
+        }}>
           <ExitIcon className="mr-2" /> Log out
         </DropdownMenuItem>
       </DropdownMenuContent>

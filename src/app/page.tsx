@@ -15,8 +15,13 @@ import {
 } from "@/lib/components/ui/table";
 import Link from "next/link";
 import { gamesList } from "@/lib/utils/data/gamesList";
+import { useUserContext } from "@/lib/utils/contexts/user-provider";
 
 const Home = (): ReactElement => {
+  const { user } = useUserContext();
+
+  console.log(user);
+
   return (
     <div className="w-2/4 flex flex-col gap-2">
       <Card>

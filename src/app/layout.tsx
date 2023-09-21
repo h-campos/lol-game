@@ -9,6 +9,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/lib/components/ui/theme-provider";
 import { Navbar } from "@/lib/components/navbar/navbar";
 import { Toaster } from "@/lib/components/ui/toaster";
+import { UserProvider } from "@/lib/utils/contexts/user-provider";
 
 const os = Open_Sans({ subsets: ["latin"] });
 
@@ -21,11 +22,13 @@ const RootLayout: Component<PropsWithChildren> = ({ children }) => {
   return (
     <html lang="en">
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-        <body className={cn("bg-white dark:bg-zinc-950 p-10 flex justify-center items-center flex-col", os)}>
-          <Navbar />
-          {children}
-          <Toaster />
-        </body>
+        <UserProvider>
+          <body className={cn("bg-white dark:bg-zinc-950 p-10 flex justify-center items-center flex-col", os)}>
+            <Navbar />
+            {children}
+            <Toaster />
+          </body>
+        </UserProvider>
       </ThemeProvider>
     </html>
   );
