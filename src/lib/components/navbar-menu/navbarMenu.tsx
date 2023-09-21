@@ -19,7 +19,7 @@ export const NavbarMenu = (): ReactElement => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline">
-          <HamburgerMenuIcon />
+          <HamburgerMenuIcon className="transition-colors text-neutral-950 dark:text-neutral-50" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
