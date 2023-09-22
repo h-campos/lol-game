@@ -8,13 +8,13 @@ type GameList = {
 export const gamesList: GameList[] = [
   {
     visualName: "Blurry Champions",
-    path: "blurry-champions",
+    path: "/app/blurry-champions",
     databaseName: "blurryChampions",
     status: "available"
   },
   {
     visualName: "Blurry Spells",
-    path: "blurry-spells",
+    path: "/app/blurry-spells",
     databaseName: "blurrySpells",
     status: "wip"
   }
