@@ -17,16 +17,20 @@ import Link from "next/link";
 import { gamesList } from "@/lib/utils/data/gamesList";
 import { useUserContext } from "@/lib/utils/contexts/user-provider";
 import { redirect } from "next/navigation";
+import useSwr from "swr";
+import type { User } from "@prisma/client";
+import { fetcher } from "@/lib/utils/database/fetcher";
+import { Skeleton } from "@/lib/components/ui/skeleton";
 
 const Home = (): ReactElement => {
   const { user } = useUserContext();
+  const { data, isLoading } = useSwr<User>("/api/user", fetcher);
 
   useEffect(() => {
     if (user === null) {
       redirect("/");
     }
   }, [user]);
-
 
   return (
     <div className="w-2/4 flex flex-col gap-2">
@@ -42,15 +46,20 @@ const Home = (): ReactElement => {
           <CardDescription>
           To start a game, please click on one of available below.
             <div className="mt-4 flex gap-4 flex-wrap">
-              {gamesList.map((game, idx) => {
-                if (game.status === "wip" || game.status === "unavailable") {
-                  return <Button key={idx} status={game.status} variant={"secondary"} disabled>{game.visualName}</Button>;
-                } else {
-                  return <Link key={idx} href={game.path}>
-                    <Button status={game.status} variant={"secondary"}>{game.visualName}</Button>
-                  </Link>;
-                }
-              })}
+              {
+                isLoading ? <Skeleton className="h-10 w-full" /> : gamesList.map((game, idx) => {
+                  if (game.databaseName === "blurryChampions" && data?.blurryChampions === false) {
+                    return <Button key={idx} status={"unavailable"} variant={"secondary"} disabled>{game.visualName}</Button>;
+                  }
+                  if (game.status === "wip" || game.status === "unavailable") {
+                    return <Button key={idx} status={game.status} variant={"secondary"} disabled>{game.visualName}</Button>;
+                  } else {
+                    return <Link key={idx} href={game.path}>
+                      <Button status={game.status} variant={"secondary"}>{game.visualName}</Button>
+                    </Link>;
+                  }
+                })
+              }
             </div>
           </CardDescription>
         </CardContent>
