@@ -21,6 +21,8 @@ import useSwr from "swr";
 import type { Games, Prisma } from "@prisma/client";
 import { fetcher } from "@/lib/utils/database/fetcher";
 import { Skeleton } from "@/lib/components/ui/skeleton";
+import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel } from "@/lib/components/ui/alert-dialog";
+import { InfoCircledIcon } from "@radix-ui/react-icons";
 
 type Props = Prisma.UserGetPayload<{
   include: { Games: true };
@@ -46,7 +48,25 @@ const Home = (): ReactElement => {
           </CardDescription>
         </CardHeader>
         <Separator className="w-[94%] mx-auto" />
-        <CardContent className="pt-6">
+        <CardContent className="pt-6 relative">
+          <AlertDialog>
+            <AlertDialogTrigger className="absolute top-3 right-6">
+              <Button variant="outline" size="icon">
+                <InfoCircledIcon />
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Informations about the colors</AlertDialogTitle>
+                <AlertDialogDescription>
+                  TODO: Add informations about the colors
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Understand</AlertDialogCancel>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
           <CardDescription>
           To start a game, please click on one of available below.
             <div className="mt-4 flex gap-4 flex-wrap">
