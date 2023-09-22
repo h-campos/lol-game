@@ -25,8 +25,6 @@ export const NavbarMenu = (): ReactElement => {
   const supabase = createClientComponentClient();
   const { user, setUser } = useUserContext();
 
-  console.log(user);
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
