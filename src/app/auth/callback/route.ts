@@ -27,19 +27,19 @@ export const GET = async(request: NextRequest): Promise<NextResponse> => {
               id: Math.random().toString(36).substring(7).toString(),
               gameName: "Blurry Champions",
               status: "available",
-              gamePath: "blurry-champions"
+              gamePath: "/app/blurry-champions"
             },
             {
               id: Math.random().toString(36).substring(7).toString(),
               gameName: "Blurry Spells",
-              status: "unvailable",
-              gamePath: "blurry-spells"
+              status: "unavailable",
+              gamePath: "/app/blurry-spells"
             },
             {
               id: Math.random().toString(36).substring(7).toString(),
               gameName: "Skins Guessing",
               status: "wip",
-              gamePath: "skins-guessing"
+              gamePath: "/app/skins-guessing"
             }
           ]
         }

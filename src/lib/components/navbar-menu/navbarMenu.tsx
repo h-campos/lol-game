@@ -14,15 +14,22 @@ import {
 } from "@/lib/components/ui/dropdown-menu";
 import Link from "next/link";
 import { HamburgerMenuIcon, ExitIcon, Pencil1Icon } from "@radix-ui/react-icons";
-import { gamesList } from "@/lib/utils/data/gamesList";
 import { useUserContext } from "@/lib/utils/contexts/user-provider";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
 import { Skeleton } from "../ui/skeleton";
+import useSwr from "swr";
+import type { Games, Prisma } from "@prisma/client";
+import { fetcher } from "@/lib/utils/database/fetcher";
+
+type Props = Prisma.UserGetPayload<{
+  include: { Games: true };
+}>
 
 export const NavbarMenu = (): ReactElement => {
   const supabase = createClientComponentClient();
   const { user, setUser } = useUserContext();
+  const { data, isLoading } = useSwr<Props>("/api/user", fetcher);
 
   return (
     <DropdownMenu>
@@ -53,15 +60,18 @@ export const NavbarMenu = (): ReactElement => {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          {gamesList.map((game, idx) => {
-            if (game.status === "wip" || game.status === "unavailable") {
-              return  <DropdownMenuItem key={idx} disabled>{game.visualName}</DropdownMenuItem>;
-            } else {
-              return <Link key={idx} href={game.path}>
-                <DropdownMenuItem>{game.visualName}</DropdownMenuItem>
-              </Link>;
-            }
-          })}
+          {isLoading && <Skeleton className="h-8 w-full" />}
+          {!isLoading && data && (
+            <>
+              {data.Games.map((game: Games, idx: number) => {
+                if (game.status === "unavailable" || game.status === "wip") {
+                  return (<DropdownMenuItem key={idx} disabled>{game.gameName}</DropdownMenuItem>);
+                } else if (game.status === "available") {
+                  return (<Link key={idx} href={game.gamePath}><DropdownMenuItem>{game.gameName}</DropdownMenuItem></Link>);
+                }
+              })}
+            </>
+          )}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>

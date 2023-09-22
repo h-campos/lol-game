@@ -15,7 +15,6 @@ import {
   TableRow
 } from "@/lib/components/ui/table";
 import Link from "next/link";
-import { gamesList } from "@/lib/utils/data/gamesList";
 import { useUserContext } from "@/lib/utils/contexts/user-provider";
 import { redirect } from "next/navigation";
 import useSwr from "swr";
@@ -26,6 +25,7 @@ import { Skeleton } from "@/lib/components/ui/skeleton";
 type Props = Prisma.UserGetPayload<{
   include: { Games: true };
 }>
+
 const Home = (): ReactElement => {
   const { user } = useUserContext();
   const { data, isLoading } = useSwr<Props>("/api/user", fetcher);
@@ -100,11 +100,9 @@ const Home = (): ReactElement => {
         <CardContent className="pt-4">
           <Tabs defaultValue="blurry-champions">
             <TabsList className="mb-2">
-              {gamesList.map((game, idx) => (
-                <TabsTrigger key={idx} value={game.path}>
-                  {game.visualName}
-                </TabsTrigger>
-              ))}
+              <TabsTrigger value="todo">
+                Todo
+              </TabsTrigger>
             </TabsList>
             <TabsContent value="blurry-champions">
               <Table>
