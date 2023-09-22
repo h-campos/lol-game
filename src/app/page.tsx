@@ -1,13 +1,23 @@
 "use client";
 
-import type { ReactElement } from "react";
+import { useEffect, type ReactElement } from "react";
 import { Card, CardHeader } from "@/lib/components/ui/card";
 import { Button } from "@/lib/components/ui/button";
 import { DiscordLogoIcon } from "@radix-ui/react-icons";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useUserContext } from "@/lib/utils/contexts/user-provider";
+import { redirect } from "next/navigation";
 
 const Home = (): ReactElement => {
   const supabase = createClientComponentClient();
+  const { user } = useUserContext();
+
+  useEffect(() => {
+    if (user) {
+      redirect("/app");
+    }
+  }, [user]);
+
 
   return (
     <div className="w-2/4 flex items-center flex-col gap-2">
