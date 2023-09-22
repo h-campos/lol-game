@@ -14,17 +14,17 @@ export const GET = async(request: NextRequest): Promise<NextResponse> => {
     const supabase = createRouteHandlerClient({ cookies });
     const resp = await supabase.auth.exchangeCodeForSession(code);
     const userAlreadyExist = await prisma.user.findUnique({ where: { id: resp.data.user?.id } });
-    if (userAlreadyExist) return NextResponse.redirect(requestUrl.origin + "/home");
+    if (userAlreadyExist) return NextResponse.redirect(requestUrl.origin + "/app");
     await prisma.user.create({
       data: {
         id: resp.data.user?.id || Math.random().toString(36).substring(7).toString(),
         email: resp.data.user?.email ?? "",
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-        username: resp.data.user?.user_metadata.custom_claims.global_name ?? ""
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        username: resp.data.user?.user_metadata.custom_claims?.global_name as string ?? ""
       }
     });
     await prisma.$disconnect();
   }
 
-  return NextResponse.redirect(requestUrl.origin + "/home");
+  return NextResponse.redirect(requestUrl.origin + "/app");
 };
