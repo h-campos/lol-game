@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 "use client";
 
 import { type ReactElement, useEffect } from "react";
@@ -18,13 +19,16 @@ import { gamesList } from "@/lib/utils/data/gamesList";
 import { useUserContext } from "@/lib/utils/contexts/user-provider";
 import { redirect } from "next/navigation";
 import useSwr from "swr";
-import type { User } from "@prisma/client";
+import type { Games, Prisma } from "@prisma/client";
 import { fetcher } from "@/lib/utils/database/fetcher";
 import { Skeleton } from "@/lib/components/ui/skeleton";
 
+type Props = Prisma.UserGetPayload<{
+  include: { Games: true };
+}>
 const Home = (): ReactElement => {
   const { user } = useUserContext();
-  const { data, isLoading } = useSwr<User>("/api/user", fetcher);
+  const { data, isLoading } = useSwr<Props>("/api/user", fetcher);
 
   useEffect(() => {
     if (user === null) {
@@ -46,20 +50,20 @@ const Home = (): ReactElement => {
           <CardDescription>
           To start a game, please click on one of available below.
             <div className="mt-4 flex gap-4 flex-wrap">
-              {
-                isLoading ? <Skeleton className="h-10 w-full" /> : gamesList.map((game, idx) => {
-                  if (game.databaseName === "blurryChampions" && data?.blurryChampions === false) {
-                    return <Button key={idx} status={"unavailable"} variant={"secondary"} disabled>{game.visualName}</Button>;
-                  }
-                  if (game.status === "wip" || game.status === "unavailable") {
-                    return <Button key={idx} status={game.status} variant={"secondary"} disabled>{game.visualName}</Button>;
-                  } else {
-                    return <Link key={idx} href={game.path}>
-                      <Button status={game.status} variant={"secondary"}>{game.visualName}</Button>
-                    </Link>;
-                  }
-                })
-              }
+              {isLoading && <Skeleton className="h-10 w-full" />}
+              {!isLoading && data && (
+                <>
+                  {data.Games.map((game: Games, idx: number) => {
+                    if (game.status === "unavailable") {
+                      return (<Button key={idx} status={game.status} variant={"secondary"} disabled>{game.gameName}</Button>);
+                    } else if (game.status === "wip") {
+                      return (<Button key={idx} status={game.status} variant={"secondary"} disabled>{game.gameName}</Button>);
+                    } else if (game.status === "available") {
+                      return (<Link key={idx} href={game.gamePath}><Button status={game.status} variant={"secondary"}>{game.gameName}</Button></Link>);
+                    }
+                  })}
+                </>
+              )}
             </div>
           </CardDescription>
         </CardContent>

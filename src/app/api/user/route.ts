@@ -9,7 +9,7 @@ export const GET = async(): Promise<NextResponse> => {
   if (!user) return NextResponse.json({ data: null });
 
   const data = await prisma.user.findUnique({
-    where: { id: user.id }
+    where: { id: user.id }, include: { Games: true }
   });
 
   return NextResponse.json(data);

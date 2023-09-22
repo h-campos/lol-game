@@ -20,7 +20,29 @@ export const GET = async(request: NextRequest): Promise<NextResponse> => {
         id: resp.data.user?.id || Math.random().toString(36).substring(7).toString(),
         email: resp.data.user?.email ?? "",
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        username: resp.data.user?.user_metadata.custom_claims?.global_name as string ?? ""
+        username: resp.data.user?.user_metadata.custom_claims?.global_name as string ?? "",
+        Games: {
+          create: [
+            {
+              id: Math.random().toString(36).substring(7).toString(),
+              gameName: "Blurry Champions",
+              status: "available",
+              gamePath: "blurry-champions"
+            },
+            {
+              id: Math.random().toString(36).substring(7).toString(),
+              gameName: "Blurry Spells",
+              status: "unvailable",
+              gamePath: "blurry-spells"
+            },
+            {
+              id: Math.random().toString(36).substring(7).toString(),
+              gameName: "Skins Guessing",
+              status: "wip",
+              gamePath: "skins-guessing"
+            }
+          ]
+        }
       }
     });
     await prisma.$disconnect();
