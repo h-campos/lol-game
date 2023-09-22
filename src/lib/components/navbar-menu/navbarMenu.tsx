@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client";
 
@@ -17,12 +18,11 @@ import { gamesList } from "@/lib/utils/data/gamesList";
 import { useUserContext } from "@/lib/utils/contexts/user-provider";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
+import { Skeleton } from "../ui/skeleton";
 
 export const NavbarMenu = (): ReactElement => {
   const supabase = createClientComponentClient();
   const { user, setUser } = useUserContext();
-
-  console.log(user);
 
   return (
     <DropdownMenu>
@@ -33,17 +33,22 @@ export const NavbarMenu = (): ReactElement => {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuGroup>
-          <DropdownMenuItem>
+          <DropdownMenuItem className="flex items-center">
+            {user == "loading" && (
+              <>
+                <Skeleton className="w-8 h-8 rounded-full mr-2" />
+                <Skeleton className="w-16 h-4" />
+              </>
+            )}
             {user && user !== "loading" && (
               <>
                 <Avatar>
-                  <AvatarImage src={user?.user_metadata?.avatar_url} alt="@shadcn" />
+                  <AvatarImage src={user.user_metadata.avatar_url} alt="@shadcn" />
                   <AvatarFallback>U</AvatarFallback>
                 </Avatar>
-                <span className="ml-2">{user?.user_metadata?.full_name}</span>
+                <span className="ml-2">{user.user_metadata.custom_claims.global_name}</span>
               </>
             )}
-
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
