@@ -19,7 +19,6 @@ import { useUserContext } from "@/lib/utils/contexts/user-provider";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
 import { Skeleton } from "../ui/skeleton";
-import { redirect } from "next/navigation";
 
 export const NavbarMenu = (): ReactElement => {
   const supabase = createClientComponentClient();
@@ -75,7 +74,6 @@ export const NavbarMenu = (): ReactElement => {
           void supabase.auth.signOut().then(() => {
             setUser(null);
           });
-          redirect("/");
         }}>
           <ExitIcon className="mr-2" /> Log out
         </DropdownMenuItem>
