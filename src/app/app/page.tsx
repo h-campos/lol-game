@@ -23,6 +23,7 @@ import { fetcher } from "@/lib/utils/database/fetcher";
 import { Skeleton } from "@/lib/components/ui/skeleton";
 import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel } from "@/lib/components/ui/alert-dialog";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
+import { Badge } from "@/lib/components/ui/badge";
 
 type Props = Prisma.UserGetPayload<{
   include: { Games: true };
@@ -90,7 +91,7 @@ const Home = (): ReactElement => {
                     if (game.status === "unavailable") {
                       return (<Button key={idx} status={game.status} variant={"secondary"} disabled>{game.gameName}</Button>);
                     } else if (game.status === "wip") {
-                      return (<Button key={idx} status={game.status} variant={"secondary"} disabled>{game.gameName}</Button>);
+                      return (<div className="relative" key={idx}><Button status={game.status} variant={"secondary"} disabled>{game.gameName}</Button><Badge className="absolute -top-3 -right-2">WIP</Badge></div>);
                     } else if (game.status === "available") {
                       return (<Link key={idx} href={game.gamePath}><Button status={game.status} variant={"secondary"}>{game.gameName}</Button></Link>);
                     }
