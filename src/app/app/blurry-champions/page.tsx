@@ -33,7 +33,17 @@ const BlurryChampions = (): ReactElement => {
   const { toast } = useToast();
   const router = useRouter();
 
-  const handleClick = (): void => {
+  const disableGameForDay = async(): Promise<void> => {
+    await fetch("/api/stateBlurryChampions", {
+      method: "POST",
+      body: JSON.stringify({
+        gameName: "Blurry Champions"
+      }),
+      headers: { "Content-Type": "application/json" }
+    });
+  };
+
+  const handleClick = async(): Promise<void> => {
     const input = inputRef.current;
     if (!input) throw new Error("Input is not defined");
     if (input.value === "") {
@@ -54,9 +64,16 @@ const BlurryChampions = (): ReactElement => {
         description: "Congratulations, the champion was " + answerBlurredChampion + ". 🎊",
         variant: "success"
       });
-      setTimeout(() => {
+      try {
+        await disableGameForDay();
         router.push("/app");
-      }, 4000);
+      } catch (error) {
+        toast({
+          title: "Oops...",
+          description: "Something gone wrong, please contact the administrator.",
+          variant: "default"
+        });
+      }
     } else {
       setBlur((current) => current - 10);
       setAnimate(true);
@@ -71,9 +88,16 @@ const BlurryChampions = (): ReactElement => {
           description: "Sorry you loose, the champion was " + answerBlurredChampion + ".",
           variant: "destructive"
         });
-        setTimeout(() => {
+        try {
+          await disableGameForDay();
           router.push("/app");
-        }, 4000);
+        } catch (error) {
+          toast({
+            title: "Oops...",
+            description: "Something gone wrong, please contact the administrator.",
+            variant: "default"
+          });
+        }
       }
     }
     input.value = "";
@@ -126,7 +150,7 @@ const BlurryChampions = (): ReactElement => {
             <div className="flex items-center space-x-2">
               <Input ref={inputRef} type="text" placeholder="Champion name..." />
               <Button onClick={(e) => {
-                handleClick();
+                void handleClick();
                 e.preventDefault();
               }}>Submit</Button>
             </div>
