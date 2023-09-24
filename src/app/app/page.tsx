@@ -59,7 +59,20 @@ const Home = (): ReactElement => {
               <AlertDialogHeader>
                 <AlertDialogTitle>Informations about the colors</AlertDialogTitle>
                 <AlertDialogDescription>
-                  TODO: Add informations about the colors
+                  <div className="flex flex-col items-start gap-2">
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 rounded-full bg-emerald-400" />
+                      <p>Available</p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 rounded-full bg-red-400" />
+                      <p>Unavailable</p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 rounded-full bg-yellow-400" />
+                      <p>In development</p>
+                    </div>
+                  </div>
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
