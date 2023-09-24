@@ -34,6 +34,14 @@ const BlurryChampions = (): ReactElement => {
   const handleClick = (): void => {
     const input = inputRef.current;
     if (!input) throw new Error("Input is not defined");
+    if (input.value === "") {
+      toast({
+        title: "Error",
+        description: "You must enter a champion name",
+        variant: "default"
+      });
+      return;
+    }
     const formattedInputValue = formatName(input.value);
     setAttempts((current) => [...current, formattedInputValue]);
     if (formattedInputValue === answerBlurredChampion) {
