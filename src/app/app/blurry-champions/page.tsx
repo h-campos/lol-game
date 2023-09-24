@@ -17,6 +17,7 @@ import ConfettiExplosion from "react-confetti-explosion";
 import { Separator } from "@/lib/components/ui/separator";
 import { Attempt } from "@/lib/components/attempt";
 import { useToast } from "@/lib/utils/hooks/use-toasts";
+import { useRouter } from "next/navigation";
 
 const BlurryChampions = (): ReactElement => {
   const [animate, setAnimate] = useState<boolean>(false);
@@ -30,6 +31,7 @@ const BlurryChampions = (): ReactElement => {
   const answerBlurredChampion = AnswerBlurChampionStore((state) => state.answerBlurredChampion);
   const inputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
+  const router = useRouter();
 
   const handleClick = (): void => {
     const input = inputRef.current;
@@ -53,8 +55,8 @@ const BlurryChampions = (): ReactElement => {
         variant: "success"
       });
       setTimeout(() => {
-        //TODO: Redirect to the next game and set the game to false
-      }, 1500);
+        router.push("/app");
+      }, 4000);
     } else {
       setBlur((current) => current - 10);
       setAnimate(true);
@@ -70,8 +72,8 @@ const BlurryChampions = (): ReactElement => {
           variant: "destructive"
         });
         setTimeout(() => {
-          //TODO: Redirect to the app page and set the game to false
-        }, 1500);
+          router.push("/app");
+        }, 4000);
       }
     }
     input.value = "";
