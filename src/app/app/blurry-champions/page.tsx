@@ -44,6 +44,9 @@ const BlurryChampions = (): ReactElement => {
         description: "Congratulations, the champion was " + answerBlurredChampion + ". 🎊",
         variant: "success"
       });
+      setTimeout(() => {
+        //TODO: Redirect to the next game and set the game to false
+      }, 1500);
     } else {
       setBlur((current) => current - 10);
       setAnimate(true);
@@ -58,6 +61,9 @@ const BlurryChampions = (): ReactElement => {
           description: "Sorry you loose, the champion was " + answerBlurredChampion + ".",
           variant: "destructive"
         });
+        setTimeout(() => {
+          //TODO: Redirect to the app page and set the game to false
+        }, 1500);
       }
     }
     input.value = "";
