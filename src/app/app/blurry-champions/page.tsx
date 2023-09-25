@@ -13,7 +13,6 @@ import { AnswerBlurChampionStore } from "@/lib/utils/stores/answerBlurChampionSt
 import { Input } from "@/lib/components/ui/input";
 import { Button } from "@/lib/components/ui/button";
 import { formatName } from "@/lib/utils/functions/formatName";
-import ConfettiExplosion from "react-confetti-explosion";
 import { Separator } from "@/lib/components/ui/separator";
 import { Attempt } from "@/lib/components/attempt";
 import { useToast } from "@/lib/utils/hooks/use-toasts";
@@ -24,8 +23,7 @@ const BlurryChampions = (): ReactElement => {
   const [animate, setAnimate] = useState<boolean>(false);
   const [blur, setBlur] = useState<number>(50);
   const [attempts, setAttempts] = useState<string[]>([]);
-  const [isWin, setIsWin] = useState<boolean>(false);
-  const [isLoose, setIsLoose] = useState<boolean>(false);
+  const [result, setResult] = useState<"win" | "loose" | "">("");
   const blurredChampion = BlurChampionStore((state) => state.blurredChampion);
   const setBlurredChampion = BlurChampionStore((state) => state.setBlurredChampion);
   const setAnswerBlurredChampion = AnswerBlurChampionStore((state) => state.setAnswerBlurredChampion);
@@ -48,7 +46,7 @@ const BlurryChampions = (): ReactElement => {
   };
 
   const playerWin = async(): Promise<void> => {
-    setIsWin(true);
+    setResult("win");
     setBlur(0);
     toggleDialogGame(true);
     setTitleDialog("Congratulations");
@@ -75,7 +73,7 @@ const BlurryChampions = (): ReactElement => {
     }, 500);
     if (blur === 10) {
       setBlur(0);
-      setIsLoose(true);
+      setResult("loose");
       toggleDialogGame(true);
       setTitleDialog("You loose");
       setDescriptionDialog("You lost the game, you can now continue to play to the other games. The champion was " + answerBlurredChampion + ".");
@@ -123,7 +121,7 @@ const BlurryChampions = (): ReactElement => {
 
   return (
     <div className="w-2/4 flex flex-col gap-2">
-      <DialogGame title={titleDialog} description={descriptionDialog} loading={isLoading} />
+      <DialogGame title={titleDialog} description={descriptionDialog} loading={isLoading} result={result} />
       <Card>
         <CardHeader>
           <CardTitle className="mb-2 font-medium">
@@ -140,15 +138,12 @@ const BlurryChampions = (): ReactElement => {
       <Card>
         <CardHeader>
           <div className="w-full flex justify-center items-center flex-col gap-4">
-            {isWin && (
-              <ConfettiExplosion particleCount={80} colors={["#63D5B7", "#66D5A7", "#6FD392", "#88CE8A"]} />
-            )}
             <div className={
               twMerge(
                 "overflow-hidden flex items-center justify-center rounded-lg border border-neutral-200 bg-white text-neutral-950 shadow-sm dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-50 w-fit",
                 animate ? "animate-shaking dark:border-red-500 border-red-500" : "border-white",
-                isWin ? "border-green-500 dark:border-green-500" : "border-white",
-                isLoose ? "border-red-500 dark:border-red-500" : "border-white",
+                result === "win" ? "border-green-500 dark:border-green-500" : "border-white",
+                result === "loose" ? "border-red-500 dark:border-red-500" : "border-white",
               )
             }
             >
