@@ -18,6 +18,7 @@ import { Attempt } from "@/lib/components/attempt";
 import { useToast } from "@/lib/utils/hooks/use-toasts";
 import { DialogGame } from "@/lib/components/dialog-game";
 import { DialogGameStore } from "@/lib/utils/stores/dialogGameStore";
+import { calculateScore } from "@/lib/utils/functions/calculateScore";
 
 const BlurryChampions = (): ReactElement => {
   const [animate, setAnimate] = useState<boolean>(false);
@@ -35,11 +36,15 @@ const BlurryChampions = (): ReactElement => {
   const [descriptionDialog, setDescriptionDialog] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  useEffect(() => {
+    toggleDialogGame(false);
+  }, []);
+
   const disableGameForDay = async(): Promise<void> => {
-    await fetch("/api/stateBlurryChampions", {
+    await fetch("/api/stateScoreBlurryChampions", {
       method: "POST",
       body: JSON.stringify({
-        gameName: "Blurry Champions"
+        score: calculateScore(attempts.length)
       }),
       headers: { "Content-Type": "application/json" }
     });
@@ -81,6 +86,7 @@ const BlurryChampions = (): ReactElement => {
         setIsLoading(true);
         await disableGameForDay();
         setIsLoading(false);
+        toggleDialogGame(false);
       } catch (error) {
         toggleDialogGame(false);
         toast({

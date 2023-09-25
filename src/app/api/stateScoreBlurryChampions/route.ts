@@ -5,9 +5,8 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
 type RequestBody = {
-  gameName: string;
+  score: number;
 }
-
 
 export const POST = async(req: NextRequest): Promise<NextResponse> => {
   const supabase = createRouteHandlerClient({ cookies });
@@ -22,7 +21,7 @@ export const POST = async(req: NextRequest): Promise<NextResponse> => {
     data: {
       Games: {
         updateMany: {
-          where: { gameName: body.gameName },
+          where: { gameName: "Blurry Champions" },
           data: {
             status: "unavailable"
           }
@@ -33,6 +32,27 @@ export const POST = async(req: NextRequest): Promise<NextResponse> => {
       Games: true
     }
   });
+
+  const lastScore = await prisma.user.findUnique({
+    where: {
+      id: user.id
+    },
+    select: {
+      blurryChampionsScore: true
+    }
+  });
+
+  if (lastScore) {
+    await prisma.user.update({
+      where: {
+        id: user.id
+      },
+      data: {
+        blurryChampionsScore: lastScore.blurryChampionsScore + body.score
+      }
+    });
+  }
+
 
   return new NextResponse("State of Blurry Champions changed.", { status: 200 });
 };
