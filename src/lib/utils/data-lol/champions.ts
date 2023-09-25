@@ -75,7 +75,6 @@ export const champions = [
   "Malphite",
   "Malzahar",
   "Maokai",
-  "Milio",
   "MissFortune",
   "Mordekaiser",
   "Morgana",
