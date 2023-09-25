@@ -2,7 +2,6 @@ export const champions = [
   "Aatrox",
   "Ahri",
   "Akali",
-  "Akshan",
   "Alistar",
   "Amumu",
   "Anivia",
