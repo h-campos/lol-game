@@ -15,6 +15,7 @@ import { DialogGameStore } from "@/lib/utils/stores/dialogGameStore";
 import Link from "next/link";
 import { CheckIcon, Cross2Icon } from "@radix-ui/react-icons";
 import { twMerge } from "tailwind-merge";
+import ConfettiExplosion from "react-confetti-explosion";
 
 export const DialogGame: Component<DialogGameProps> = ({ title, description, loading, result }): ReactElement => {
   const isOpen = DialogGameStore((state) => state.isOpen);
@@ -23,6 +24,7 @@ export const DialogGame: Component<DialogGameProps> = ({ title, description, loa
     <Dialog open={isOpen}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader className="relative">
+          {result === "win" && (<ConfettiExplosion className="absolute top-2/4 left-2/4 z-50" particleCount={80} colors={["#63D5B7", "#66D5A7", "#6FD392", "#88CE8A"]} />)}
           <div className={twMerge("p-2 rounded-full absolute -top-7 -right-7 z-50", result === "win" ? "bg-emerald-500" : "bg-red-500")}>
             {result === "win" ? (<CheckIcon className="h-4 w-4" />) : (<Cross2Icon className="h-4 w-4" />) }
           </div>

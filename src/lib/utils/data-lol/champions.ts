@@ -140,7 +140,6 @@ export const champions = [
   "Vayne",
   "Veigar",
   "Velkoz",
-  "Vex",
   "Vi",
   "Viego",
   "Viktor",
