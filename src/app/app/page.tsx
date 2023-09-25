@@ -63,11 +63,11 @@ const Home = (): ReactElement => {
                   <div className="flex flex-col items-start gap-2">
                     <div className="flex items-center gap-2">
                       <div className="w-4 h-4 rounded-full bg-emerald-400" />
-                      <p>Available</p>
+                      <p>You can play this game</p>
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="w-4 h-4 rounded-full bg-red-400" />
-                      <p>Unavailable</p>
+                      <p>You already play this game today</p>
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="w-4 h-4 rounded-full bg-yellow-400" />
