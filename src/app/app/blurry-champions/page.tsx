@@ -17,21 +17,25 @@ import ConfettiExplosion from "react-confetti-explosion";
 import { Separator } from "@/lib/components/ui/separator";
 import { Attempt } from "@/lib/components/attempt";
 import { useToast } from "@/lib/utils/hooks/use-toasts";
-import { useRouter } from "next/navigation";
+import { DialogGame } from "@/lib/components/dialog-game";
+import { DialogGameStore } from "@/lib/utils/stores/dialogGameStore";
 
 const BlurryChampions = (): ReactElement => {
   const [animate, setAnimate] = useState<boolean>(false);
   const [blur, setBlur] = useState<number>(50);
+  const [attempts, setAttempts] = useState<string[]>([]);
   const [isWin, setIsWin] = useState<boolean>(false);
   const [isLoose, setIsLoose] = useState<boolean>(false);
-  const [attempts, setAttempts] = useState<string[]>([]);
   const blurredChampion = BlurChampionStore((state) => state.blurredChampion);
   const setBlurredChampion = BlurChampionStore((state) => state.setBlurredChampion);
   const setAnswerBlurredChampion = AnswerBlurChampionStore((state) => state.setAnswerBlurredChampion);
   const answerBlurredChampion = AnswerBlurChampionStore((state) => state.answerBlurredChampion);
   const inputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
-  const router = useRouter();
+  const toggleDialogGame = DialogGameStore((state) => state.toggle);
+  const [titleDialog, setTitleDialog] = useState<string>("");
+  const [descriptionDialog, setDescriptionDialog] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const disableGameForDay = async(): Promise<void> => {
     await fetch("/api/stateBlurryChampions", {
@@ -41,6 +45,53 @@ const BlurryChampions = (): ReactElement => {
       }),
       headers: { "Content-Type": "application/json" }
     });
+  };
+
+  const playerWin = async(): Promise<void> => {
+    setIsWin(true);
+    setBlur(0);
+    toggleDialogGame(true);
+    setTitleDialog("Congratulations");
+    setDescriptionDialog("You won the game, you can now continue to play to the other games.");
+    try {
+      setIsLoading(true);
+      await disableGameForDay();
+      setIsLoading(false);
+    } catch (error) {
+      toggleDialogGame(false);
+      toast({
+        title: "Oops...",
+        description: "Something gone wrong, please contact the administrator.",
+        variant: "default"
+      });
+    }
+  };
+
+  const playerLoose = async(): Promise<void> => {
+    setBlur((current) => current - 10);
+    setAnimate(true);
+    setTimeout(() => {
+      setAnimate(false);
+    }, 500);
+    if (blur === 10) {
+      setBlur(0);
+      setIsLoose(true);
+      toggleDialogGame(true);
+      setTitleDialog("You loose");
+      setDescriptionDialog("You lost the game, you can now continue to play to the other games. The champion was " + answerBlurredChampion + ".");
+      try {
+        setIsLoading(true);
+        await disableGameForDay();
+        setIsLoading(false);
+      } catch (error) {
+        toggleDialogGame(false);
+        toast({
+          title: "Oops...",
+          description: "Something gone wrong, please contact the administrator.",
+          variant: "default"
+        });
+      }
+    }
   };
 
   const handleClick = async(): Promise<void> => {
@@ -57,48 +108,9 @@ const BlurryChampions = (): ReactElement => {
     const formattedInputValue = formatName(input.value);
     setAttempts((current) => [...current, formattedInputValue]);
     if (formattedInputValue === answerBlurredChampion) {
-      setIsWin(true);
-      setBlur(0);
-      toast({
-        title: "You win !",
-        description: "Congratulations, the champion was " + answerBlurredChampion + ". 🎊",
-        variant: "success"
-      });
-      try {
-        await disableGameForDay();
-        router.push("/app");
-      } catch (error) {
-        toast({
-          title: "Oops...",
-          description: "Something gone wrong, please contact the administrator.",
-          variant: "default"
-        });
-      }
+      await playerWin();
     } else {
-      setBlur((current) => current - 10);
-      setAnimate(true);
-      setTimeout(() => {
-        setAnimate(false);
-      }, 500);
-      if (blur === 10) {
-        setBlur(0);
-        setIsLoose(true);
-        toast({
-          title: "You loose...",
-          description: "Sorry you loose, the champion was " + answerBlurredChampion + ".",
-          variant: "destructive"
-        });
-        try {
-          await disableGameForDay();
-          router.push("/app");
-        } catch (error) {
-          toast({
-            title: "Oops...",
-            description: "Something gone wrong, please contact the administrator.",
-            variant: "default"
-          });
-        }
-      }
+      await playerLoose();
     }
     input.value = "";
   };
@@ -111,6 +123,7 @@ const BlurryChampions = (): ReactElement => {
 
   return (
     <div className="w-2/4 flex flex-col gap-2">
+      <DialogGame title={titleDialog} description={descriptionDialog} loading={isLoading} />
       <Card>
         <CardHeader>
           <CardTitle className="mb-2 font-medium">
