@@ -14,6 +14,7 @@ model User {
   lastDayPlayed        DateTime @updatedAt
   Games                Games[]
   blurryChampionsScore Int      @default(0)
+  spellsGuessingScore  Int      @default(0)
 }
 
 model Games {
@@ -22,5 +23,5 @@ model Games {
   status   String @default("available")
   gamePath String
   userId   String
-  user     User   @relation(fields: [userId], references: [id])
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
