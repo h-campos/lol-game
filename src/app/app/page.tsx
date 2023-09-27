@@ -5,15 +5,6 @@ import { type ReactElement, useEffect } from "react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/lib/components/ui/card";
 import { Button } from "@/lib/components/ui/button";
 import { Separator } from "@/lib/components/ui/separator";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/lib/components/ui/tabs";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow
-} from "@/lib/components/ui/table";
 import Link from "next/link";
 import { useUserContext } from "@/lib/utils/contexts/user-provider";
 import { redirect } from "next/navigation";
@@ -24,6 +15,7 @@ import { Skeleton } from "@/lib/components/ui/skeleton";
 import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel } from "@/lib/components/ui/alert-dialog";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { Badge } from "@/lib/components/ui/badge";
+import { LeaderBoard } from "./_components/leaderboard";
 
 type Props = Prisma.UserGetPayload<{
   include: { Games: true };
@@ -125,41 +117,7 @@ const Home = (): ReactElement => {
           </div>
         </CardContent>
       </Card>
-      <Card>
-        <CardHeader className="pb-4">
-          <CardTitle>Leaderboard</CardTitle>
-          <CardDescription>See who is the best player.</CardDescription>
-        </CardHeader>
-        <Separator className="w-[94%] mx-auto" />
-        <CardContent className="pt-4">
-          <Tabs defaultValue="blurry-champions">
-            <TabsList className="mb-2">
-              <TabsTrigger value="todo">
-                Todo
-              </TabsTrigger>
-            </TabsList>
-            <TabsContent value="blurry-champions">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Pseudo</TableHead>
-                    <TableHead>Actual streak</TableHead>
-                    <TableHead>Best streak</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  <TableRow>
-                    <TableCell className="font-bold">Anyonipolochon</TableCell>
-                    <TableCell>5</TableCell>
-                    <TableCell>12</TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </TabsContent>
-            <TabsContent value="other1">Change your password here.</TabsContent>
-          </Tabs>
-        </CardContent>
-      </Card>
+      <LeaderBoard />
     </div>
   );
 };
