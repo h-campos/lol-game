@@ -34,7 +34,7 @@ export const LeaderBoard = (): ReactElement => {
             <TabsTrigger value="blurry-champions">
                 Blurry Champions
             </TabsTrigger>
-            <TabsTrigger className="relative" value="spells-guessing">
+            <TabsTrigger className="relative" value="spells-guessing" disabled>
               <Badge className="absolute -top-4 -right-4" variant="default">
                 WIP
               </Badge>
@@ -42,37 +42,39 @@ export const LeaderBoard = (): ReactElement => {
             </TabsTrigger>
           </TabsList>
           <TabsContent value="blurry-champions">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Pseudo</TableHead>
-                  <TableHead className="text-end">Score</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {isLoading && (<Skeleton className="rounded-md w-full h-6" />)}
-                {data && data.map((score: BlurryChampionsScore, idx: number) => {
-                  if (idx === 0) {
-                    return <TableRowLeaderBoard className="bg-yellow-500/75 font-bold hover:bg-yellow-500" key={idx}>
-                      <TableCell className="rounded-tl-md rounded-bl-md">
-                        <div className="flex items-center gap-2">
-                          {score.username}
-                          <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-crown" width="28" height="28" viewBox="0 0 24 24" stroke-width="2" stroke="#E2B53E" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                            <path d="M12 6l4 6l5 -4l-2 10h-14l-2 -10l5 4z" />
-                          </svg>
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-end rounded-tr-md rounded-br-md">{score.blurryChampionsScore}</TableCell>
+            {isLoading && (<Skeleton className="rounded-md w-full h-6" />)}
+            {data && !isLoading && (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Pseudo</TableHead>
+                    <TableHead className="text-end">Score</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {data && data.map((score: BlurryChampionsScore, idx: number) => {
+                    if (idx === 0) {
+                      return <TableRowLeaderBoard className="bg-yellow-500/75 font-bold hover:bg-yellow-500" key={idx}>
+                        <TableCell className="rounded-tl-md rounded-bl-md">
+                          <div className="flex items-center gap-2">
+                            {score.username}
+                            <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-crown" width="28" height="28" viewBox="0 0 24 24" stroke-width="2" stroke="#E2B53E" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                              <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                              <path d="M12 6l4 6l5 -4l-2 10h-14l-2 -10l5 4z" />
+                            </svg>
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-end rounded-tr-md rounded-br-md">{score.blurryChampionsScore}</TableCell>
+                      </TableRowLeaderBoard>;
+                    }
+                    return <TableRowLeaderBoard key={idx}>
+                      <TableCell>{score.username}</TableCell>
+                      <TableCell className="text-end">{score.blurryChampionsScore}</TableCell>
                     </TableRowLeaderBoard>;
-                  }
-                  return <TableRowLeaderBoard key={idx}>
-                    <TableCell>{score.username}</TableCell>
-                    <TableCell className="text-end">{score.blurryChampionsScore}</TableCell>
-                  </TableRowLeaderBoard>;
-                })}
-              </TableBody>
-            </Table>
+                  })}
+                </TableBody>
+              </Table>
+            )}
           </TabsContent>
         </Tabs>
       </CardContent>
