@@ -97,7 +97,6 @@ export const champions = [
   "Rammus",
   "RekSai",
   "Rell",
-  "RenataGlasc",
   "Renekton",
   "Rengar",
   "Riven",

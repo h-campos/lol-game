@@ -19,6 +19,7 @@ import { useToast } from "@/lib/utils/hooks/use-toasts";
 import { DialogGame } from "@/lib/components/dialog-game";
 import { DialogGameStore } from "@/lib/utils/stores/dialogGameStore";
 import { calculateScore } from "@/lib/utils/functions/calculateScore";
+import { useRouter } from "next/navigation";
 
 const BlurryChampions = (): ReactElement => {
   const [animate, setAnimate] = useState<boolean>(false);
@@ -36,9 +37,24 @@ const BlurryChampions = (): ReactElement => {
   const [descriptionDialog, setDescriptionDialog] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  const router = useRouter();
+
   useEffect(() => {
     toggleDialogGame(false);
+    void isGameAvailable();
   }, []);
+
+  const isGameAvailable = async(): Promise<void> => {
+    const response = await fetch("/api/gameIsAvailable", {
+      method: "POST",
+      body: JSON.stringify({
+        gameName: "Blurry Champions"
+      }),
+      headers: { "Content-Type": "application/json" }
+    });
+    const data = await response.json() as string;
+    if (data === "unavailable") router.push("/app");
+  };
 
   const disableGameForDay = async(): Promise<void> => {
     await fetch("/api/stateScoreBlurryChampions", {
