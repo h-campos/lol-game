@@ -178,7 +178,9 @@ const BlurryChampions = (): ReactElement => {
               />
             </div>
             <div className="flex items-center space-x-2">
-              <Input ref={inputRef} type="text" placeholder="Champion name..." />
+              <Input ref={inputRef} type="text" placeholder="Champion name..." onKeyDown={(e) => {
+                if (e.key === "Enter") void handleClick();
+              }} />
               <Button onClick={(e) => {
                 void handleClick();
                 e.preventDefault();
