@@ -25,11 +25,19 @@ const Home = (): ReactElement => {
   const { user } = useUserContext();
   const { data, isLoading } = useSwr<Props>("/api/user", fetcher);
 
+  const needToSetGameAvailable = async(): Promise<void> => {
+    await fetch("/api/lastDayPlayed");
+  };
+
   useEffect(() => {
     if (user === null) {
       redirect("/");
     }
   }, [user]);
+
+  useEffect(() => {
+    void needToSetGameAvailable();
+  }, []);
 
   return (
     <div className="w-2/4 flex flex-col gap-2">
