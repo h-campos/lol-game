@@ -12,10 +12,10 @@ import useSwr from "swr";
 import type { Games, Prisma } from "@prisma/client";
 import { fetcher } from "@/lib/utils/database/fetcher";
 import { Skeleton } from "@/lib/components/ui/skeleton";
-import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel } from "@/lib/components/ui/alert-dialog";
-import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { Badge } from "@/lib/components/ui/badge";
 import { LeaderBoard } from "./_components/leaderboard";
+import { ColorsInformations } from "./_components/colorsInformations";
+import { Statistics } from "./_components/statistics";
 
 type Props = Prisma.UserGetPayload<{
   include: { Games: true };
@@ -42,37 +42,7 @@ const Home = (): ReactElement => {
         </CardHeader>
         <Separator className="w-[94%] mx-auto" />
         <CardContent className="pt-6 relative">
-          <AlertDialog>
-            <AlertDialogTrigger className="absolute top-3 right-6">
-              <Button variant="outline" size="icon">
-                <InfoCircledIcon />
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Informations about the colors</AlertDialogTitle>
-                <AlertDialogDescription>
-                  <div className="flex flex-col items-start gap-2">
-                    <div className="flex items-center gap-2">
-                      <div className="w-4 h-4 rounded-full bg-emerald-400" />
-                      <p>You can play this game</p>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-4 h-4 rounded-full bg-red-400" />
-                      <p>You already play this game today</p>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-4 h-4 rounded-full bg-yellow-400" />
-                      <p>In development</p>
-                    </div>
-                  </div>
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Understand</AlertDialogCancel>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+          <ColorsInformations />
           <CardDescription>
           To start a game, please click on one of available below.
             <div className="mt-4 flex gap-4 flex-wrap">
@@ -94,29 +64,7 @@ const Home = (): ReactElement => {
           </CardDescription>
         </CardContent>
       </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle>Statistics</CardTitle>
-          <CardDescription>You can see here all of your stats on the games.</CardDescription>
-        </CardHeader>
-        <CardContent className="grid gap-4">
-          <div>
-            <div
-              className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0"
-            >
-              <span className="flex h-2 w-2 translate-y-1 rounded-full bg-emerald-400" />
-              <div className="space-y-1">
-                <p className="text-sm font-medium leading-none">
-                  Blurry Champions
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  Youve got a streak of 5 wins in a row 🔥
-                </p>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      <Statistics />
       <LeaderBoard />
     </div>
   );

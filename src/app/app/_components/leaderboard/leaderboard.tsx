@@ -58,7 +58,7 @@ export const LeaderBoard = (): ReactElement => {
                         <TableCell className="rounded-tl-md rounded-bl-md">
                           <div className="flex items-center gap-2">
                             {score.username}
-                            <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-crown" width="28" height="28" viewBox="0 0 24 24" stroke-width="2" stroke="#E2B53E" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-crown" width="22" height="22" viewBox="0 0 24 24" stroke-width="2" stroke="#E2B53E" fill="none" stroke-linecap="round" stroke-linejoin="round">
                               <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                               <path d="M12 6l4 6l5 -4l-2 10h-14l-2 -10l5 4z" />
                             </svg>
