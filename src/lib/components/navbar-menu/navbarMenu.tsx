@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger
 } from "@/lib/components/ui/dropdown-menu";
 import Link from "next/link";
-import { HamburgerMenuIcon, ExitIcon, Pencil1Icon } from "@radix-ui/react-icons";
+import { HamburgerMenuIcon, ExitIcon } from "@radix-ui/react-icons";
 import { useUserContext } from "@/lib/utils/contexts/user-provider";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
@@ -76,7 +76,7 @@ export const NavbarMenu = (): ReactElement => {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem>
-            <Pencil1Icon className="mr-2" /> Make a proposal
+            Report / Proposal
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
