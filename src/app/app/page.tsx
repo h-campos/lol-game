@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 "use client";
 
-import { type ReactElement, useEffect } from "react";
+import { type ReactElement, useEffect, useState } from "react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/lib/components/ui/card";
 import { Button } from "@/lib/components/ui/button";
 import { Separator } from "@/lib/components/ui/separator";
@@ -24,9 +24,12 @@ type Props = Prisma.UserGetPayload<{
 const Home = (): ReactElement => {
   const { user } = useUserContext();
   const { data, isLoading } = useSwr<Props>("/api/user", fetcher);
+  const [loadingGamessAvailable, setLoadingGamesAvailable] = useState<boolean>(false);
 
   const needToSetGameAvailable = async(): Promise<void> => {
+    setLoadingGamesAvailable(true);
     await fetch("/api/lastDayPlayed");
+    setLoadingGamesAvailable(false);
   };
 
   useEffect(() => {
@@ -54,8 +57,8 @@ const Home = (): ReactElement => {
           <CardDescription>
           To start a game, please click on one of available below.
             <div className="mt-4 flex gap-4 flex-wrap">
-              {isLoading && <Skeleton className="h-10 w-full" />}
-              {!isLoading && data && (
+              {isLoading || loadingGamessAvailable && <Skeleton className="h-10 w-full" />}
+              {!isLoading && !loadingGamessAvailable && data && (
                 <>
                   {data.Games.map((game: Games, idx: number) => {
                     if (game.status === "unavailable") {
