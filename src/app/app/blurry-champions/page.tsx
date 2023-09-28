@@ -53,7 +53,14 @@ const BlurryChampions = (): ReactElement => {
       headers: { "Content-Type": "application/json" }
     });
     const data = await response.json() as string;
-    if (data === "unavailable") router.push("/app");
+    if (data === "unavailable") {
+      router.push("/app");
+      toast({
+        title: "Oops...",
+        description: "You already played this game today, please come back tomorow !",
+        variant: "default"
+      });
+    }
   };
 
   const disableGameForDay = async(): Promise<void> => {
