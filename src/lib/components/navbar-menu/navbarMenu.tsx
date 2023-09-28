@@ -21,6 +21,7 @@ import { Skeleton } from "../ui/skeleton";
 import useSwr from "swr";
 import type { Games, Prisma } from "@prisma/client";
 import { fetcher } from "@/lib/utils/database/fetcher";
+import { DialogReportProposalStore } from "@/lib/utils/stores/dialogReportProposalStore";
 
 type Props = Prisma.UserGetPayload<{
   include: { Games: true };
@@ -30,6 +31,7 @@ export const NavbarMenu = (): ReactElement => {
   const supabase = createClientComponentClient();
   const { user, setUser } = useUserContext();
   const { data, isLoading } = useSwr<Props>("/api/user", fetcher);
+  const toggle = DialogReportProposalStore((state) => state.toggle);
 
   return (
     <DropdownMenu>
@@ -75,7 +77,7 @@ export const NavbarMenu = (): ReactElement => {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={toggle}>
             Report / Proposal
           </DropdownMenuItem>
         </DropdownMenuGroup>
