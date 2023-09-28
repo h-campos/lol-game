@@ -53,8 +53,14 @@ export const LeaderBoard = (): ReactElement => {
                 </TableHeader>
                 <TableBody>
                   {data && data.map((score: BlurryChampionsScore, idx: number) => {
+                    if (idx === 0 && score.blurryChampionsScore === 0) {
+                      return <TableRowLeaderBoard key={idx}>
+                        <TableCell>{score.username}</TableCell>
+                        <TableCell className="text-end">{score.blurryChampionsScore}</TableCell>
+                      </TableRowLeaderBoard>;
+                    }
                     if (idx === 0) {
-                      return <TableRowLeaderBoard className="bg-yellow-500/75 font-bold hover:bg-yellow-500" key={idx}>
+                      return <TableRowLeaderBoard className="font-bold" key={idx}>
                         <TableCell className="rounded-tl-md rounded-bl-md">
                           <div className="flex items-center gap-2">
                             {score.username}
