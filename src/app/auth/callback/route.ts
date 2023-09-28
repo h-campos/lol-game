@@ -14,6 +14,7 @@ export const GET = async(request: NextRequest): Promise<NextResponse> => {
     const supabase = createRouteHandlerClient({ cookies });
     const resp = await supabase.auth.exchangeCodeForSession(code);
     const userAlreadyExist = await prisma.user.findUnique({ where: { id: resp.data.user?.id } });
+    console.log(requestUrl.origin);
     if (userAlreadyExist) return NextResponse.redirect(requestUrl.origin + "/app");
     await prisma.user.create({
       data: {
