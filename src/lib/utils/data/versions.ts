@@ -11,5 +11,11 @@ export const versions = [
       "Add changelog system.",
       "Add auth system with Discord."
     ]
+  },
+  {
+    title: "v1.0.1",
+    logs: [
+      "Remove the changelog button when the user is not connect because he can't click on it."
+    ]
   }
 ];
