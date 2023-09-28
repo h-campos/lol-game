@@ -182,6 +182,7 @@ const BlurryChampions = (): ReactElement => {
                 height={150}
                 alt="Square assets of a champion of league of legends"
                 style={{ filter: `blur(${blur}px)` }}
+                className={"pointer-events-none"}
               />
             </div>
             <div className="flex items-center space-x-2">
