@@ -15,8 +15,9 @@ import { Skeleton } from "@/lib/components/ui/skeleton";
 import { Badge } from "@/lib/components/ui/badge";
 import { LeaderBoard } from "./_components/leaderboard";
 import { ColorsInformations } from "./_components/colorsInformations";
-import { Statistics } from "./_components/statistics";
+// import { Statistics } from "./_components/statistics";
 import { DialogReportProposal } from "@/lib/components/dialog-report-proposal/dialogReportProposal";
+import { ReportProposal } from "./_components/reportProposal";
 
 type Props = Prisma.UserGetPayload<{
   include: { Games: true };
@@ -76,8 +77,9 @@ const Home = (): ReactElement => {
           </CardDescription>
         </CardContent>
       </Card>
-      <Statistics />
+      {/* <Statistics /> */}
       <LeaderBoard />
+      <ReportProposal />
       <DialogReportProposal />
     </div>
   );
