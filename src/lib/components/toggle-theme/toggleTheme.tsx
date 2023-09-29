@@ -9,7 +9,7 @@ import { Button } from "@/lib/components/ui/button";
 import type { ReactElement } from "react";
 
 export const ToggleTheme = (): ReactElement => {
-  const { setTheme } = useTheme();
+  const { setTheme, theme } = useTheme();
 
   return (
     <Button
