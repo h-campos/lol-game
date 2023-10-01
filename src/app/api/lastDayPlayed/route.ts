@@ -20,9 +20,13 @@ export const GET = async(): Promise<NextResponse> => {
 
   const today = new Date().toLocaleDateString().split("/");
 
-  if (dayJS(`${lastDayPlayed[2]}-${lastDayPlayed[0]}-${lastDayPlayed[1]}`).isBefore(dayJS())) {
+  if (dayJS(`${lastDayPlayed[1]}-${lastDayPlayed[0]}-${lastDayPlayed[2]}`).isBefore(dayJS())) {
     console.log("date in database less than today date");
+  } else {
+    console.log("date in database more or equal than today date");
   }
+
+  console.log(dayJS());
 
   console.log(lastDayPlayed[0], today[0]);
   if (lastDayPlayed[0] < today[0]) {
