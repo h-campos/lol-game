@@ -14,30 +14,32 @@ export const GET = async(): Promise<NextResponse> => {
     select: { lastDayPlayed: true }
   });
 
-  const lastDayPlayed = data?.lastDayPlayed;
+  const lastDayPlayed = data?.lastDayPlayed.toLocaleString();
+
+  console.log(lastDayPlayed);
 
   if (!lastDayPlayed) return NextResponse.json({ error: "No data found." }, { status: 404 });
 
-  if (dayJS(lastDayPlayed).isBefore(dayJS())) {
-    await prisma.user.update({
-      where: {
-        id: user.id
-      },
-      data: {
-        Games: {
-          updateMany: {
-            where: { gameName: "Blurry Champions" },
-            data: {
-              status: "available"
-            }
-          }
-        }
-      },
-      include: {
-        Games: true
-      }
-    });
-  }
+  // if (dayJS(lastDayPlayed).isBefore(dayJS())) {
+  //   await prisma.user.update({
+  //     where: {
+  //       id: user.id
+  //     },
+  //     data: {
+  //       Games: {
+  //         updateMany: {
+  //           where: { gameName: "Blurry Champions" },
+  //           data: {
+  //             status: "available"
+  //           }
+  //         }
+  //       }
+  //     },
+  //     include: {
+  //       Games: true
+  //     }
+  //   });
+  // }
 
   return new NextResponse("The player have to wait to replay the games", { status: 200 });
 };
