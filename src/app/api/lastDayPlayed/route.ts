@@ -19,7 +19,7 @@ export const GET = async(): Promise<NextResponse> => {
 
   const today = new Date().toLocaleDateString().split("/");
 
-  if (lastDayPlayed[0] < today[0]) {
+  if (lastDayPlayed[1] < today[1]) {
     await prisma.user.update({
       where: {
         id: user.id
@@ -38,7 +38,7 @@ export const GET = async(): Promise<NextResponse> => {
         Games: true
       }
     });
-  } else if (lastDayPlayed[1] < today[1]) {
+  } else if (lastDayPlayed[0] < today[0]) {
     await prisma.user.update({
       where: {
         id: user.id
