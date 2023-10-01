@@ -14,11 +14,11 @@ export const GET = async(): Promise<NextResponse> => {
     select: { lastDayPlayed: true }
   });
 
-  const lastDayPlayed = data?.lastDayPlayed.toLocaleString();
+  const lastDayPlayed = data?.lastDayPlayed;
 
   console.log(lastDayPlayed);
 
-  dayJS.tz("America/New_York");
+  dayJS.tz(lastDayPlayed, "Europe/Paris");
   console.log(dayJS());
 
   if (!lastDayPlayed) return NextResponse.json({ error: "No data found." }, { status: 404 });
