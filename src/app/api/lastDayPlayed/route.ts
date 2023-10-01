@@ -2,7 +2,7 @@ import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { prisma } from "@/lib/utils/database";
-// import { dayJS } from "@/lib/utils/day-js";
+import { dayJS } from "@/lib/utils/day-js";
 
 export const GET = async(): Promise<NextResponse> => {
   const supabase = createRouteHandlerClient({ cookies });
@@ -17,6 +17,9 @@ export const GET = async(): Promise<NextResponse> => {
   const lastDayPlayed = data?.lastDayPlayed.toLocaleString();
 
   console.log(lastDayPlayed);
+
+  dayJS.tz("America/New_York");
+  console.log(dayJS());
 
   if (!lastDayPlayed) return NextResponse.json({ error: "No data found." }, { status: 404 });
 
