@@ -23,26 +23,29 @@ export const GET = async(): Promise<NextResponse> => {
 
   if (!lastDayPlayed) return NextResponse.json({ error: "No data found." }, { status: 404 });
 
-  // if (dayJS(lastDayPlayed).isBefore(dayJS())) {
-  //   await prisma.user.update({
-  //     where: {
-  //       id: user.id
-  //     },
-  //     data: {
-  //       Games: {
-  //         updateMany: {
-  //           where: { gameName: "Blurry Champions" },
-  //           data: {
-  //             status: "available"
-  //           }
-  //         }
-  //       }
-  //     },
-  //     include: {
-  //       Games: true
-  //     }
-  //   });
-  // }
+  if ((dayJS(lastDayPlayed).get("date") < dayJS().get("date")) || (dayJS(lastDayPlayed).get("month") < dayJS().get("month"))) {
+    console.log("database day or month is lesser than today day or month");
+    await prisma.user.update({
+      where: {
+        id: user.id
+      },
+      data: {
+        Games: {
+          updateMany: {
+            where: { gameName: "Blurry Champions" },
+            data: {
+              status: "available"
+            }
+          }
+        }
+      },
+      include: {
+        Games: true
+      }
+    });
+  } else {
+    console.log("database day or month is greater than today day or month, user have to wait to play again to the games");
+  }
 
   return new NextResponse("The player have to wait to replay the games", { status: 200 });
 };
