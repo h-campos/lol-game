@@ -59,5 +59,7 @@ export const GET = async(): Promise<NextResponse> => {
     });
   }
 
+  console.log(lastDayPlayed[1], today[1]);
+
   return new NextResponse("The player have to wait to replay the games", { status: 200 });
 };
