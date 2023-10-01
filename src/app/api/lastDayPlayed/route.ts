@@ -41,7 +41,9 @@ export const GET = async(): Promise<NextResponse> => {
         Games: true
       }
     });
-  } else if (lastDayPlayed[0] < today[0]) {
+  }
+
+  if (lastDayPlayed[0] < today[0]) {
     console.log("month in database less than today month");
     await prisma.user.update({
       where: {
@@ -62,8 +64,6 @@ export const GET = async(): Promise<NextResponse> => {
       }
     });
   }
-
-  console.log("The player have to wait to replay the games");
 
   return new NextResponse("The player have to wait to replay the games", { status: 200 });
 };
