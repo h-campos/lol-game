@@ -18,61 +18,26 @@ export const GET = async(): Promise<NextResponse> => {
 
   if (!lastDayPlayed) return NextResponse.json({ error: "No data found." }, { status: 404 });
 
-  // const today = new Date().toLocaleDateString().split("/");
-
   if (dayJS(lastDayPlayed).isBefore(dayJS())) {
-    console.log("date in database less than today date");
-  } else {
-    console.log("date in database more or equal than today date");
+    await prisma.user.update({
+      where: {
+        id: user.id
+      },
+      data: {
+        Games: {
+          updateMany: {
+            where: { gameName: "Blurry Champions" },
+            data: {
+              status: "available"
+            }
+          }
+        }
+      },
+      include: {
+        Games: true
+      }
+    });
   }
-
-  console.log(dayJS());
-  console.log(lastDayPlayed);
-
-  // console.log(lastDayPlayed[0], today[0]);
-  // if (lastDayPlayed[0] < today[0]) {
-  //   console.log("month in database less than today month");
-  //   await prisma.user.update({
-  //     where: {
-  //       id: user.id
-  //     },
-  //     data: {
-  //       Games: {
-  //         updateMany: {
-  //           where: { gameName: "Blurry Champions" },
-  //           data: {
-  //             status: "available"
-  //           }
-  //         }
-  //       }
-  //     },
-  //     include: {
-  //       Games: true
-  //     }
-  //   });
-  // }
-
-  // if (lastDayPlayed[1] < today[1]) {
-  //   console.log("day in database less than today day");
-  //   await prisma.user.update({
-  //     where: {
-  //       id: user.id
-  //     },
-  //     data: {
-  //       Games: {
-  //         updateMany: {
-  //           where: { gameName: "Blurry Champions" },
-  //           data: {
-  //             status: "available"
-  //           }
-  //         }
-  //       }
-  //     },
-  //     include: {
-  //       Games: true
-  //     }
-  //   });
-  // }
 
   return new NextResponse("The player have to wait to replay the games", { status: 200 });
 };
