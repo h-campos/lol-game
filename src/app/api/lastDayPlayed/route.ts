@@ -2,6 +2,7 @@ import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { prisma } from "@/lib/utils/database";
+import { dayJS } from "@/lib/utils/day-js";
 
 export const GET = async(): Promise<NextResponse> => {
   const supabase = createRouteHandlerClient({ cookies });
@@ -18,6 +19,10 @@ export const GET = async(): Promise<NextResponse> => {
   if (!lastDayPlayed) return NextResponse.json({ error: "No data found." }, { status: 404 });
 
   const today = new Date().toLocaleDateString().split("/");
+
+  if (dayJS(`${lastDayPlayed[2]}-${lastDayPlayed[0]}-${lastDayPlayed[1]}`).isBefore(dayJS())) {
+    console.log("date in database less than today date");
+  }
 
   console.log(lastDayPlayed[0], today[0]);
   if (lastDayPlayed[0] < today[0]) {
