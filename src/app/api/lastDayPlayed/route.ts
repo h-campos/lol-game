@@ -16,8 +16,10 @@ export const GET = async(): Promise<NextResponse> => {
 
   const lastDayPlayed = data?.lastDayPlayed;
   dayJS.tz(lastDayPlayed, "Europe/Paris");
-  console.log(dayJS(lastDayPlayed).get("date"));
-  console.log(dayJS().get("date"));
+  console.log(dayJS(lastDayPlayed).get("date"), "lastDayPlayed, day");
+  console.log(dayJS(lastDayPlayed).get("month"), "lastDayPlayed, month");
+  console.log(dayJS().get("date"), "dayJS, day");
+  console.log(dayJS().get("month"), "dayJSn, month");
 
   if (!lastDayPlayed) return NextResponse.json({ error: "No data found." }, { status: 404 });
 
