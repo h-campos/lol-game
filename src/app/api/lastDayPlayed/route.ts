@@ -20,9 +20,8 @@ export const GET = async(): Promise<NextResponse> => {
   const today = new Date().toLocaleDateString().split("/");
 
   console.log(lastDayPlayed[0], today[0]);
-
-  if (lastDayPlayed[1] < today[1]) {
-    console.log("day in database less than today day");
+  if (lastDayPlayed[0] < today[0]) {
+    console.log("month in database less than today month");
     await prisma.user.update({
       where: {
         id: user.id
@@ -43,8 +42,8 @@ export const GET = async(): Promise<NextResponse> => {
     });
   }
 
-  if (lastDayPlayed[0] < today[0]) {
-    console.log("month in database less than today month");
+  if (lastDayPlayed[1] < today[1]) {
+    console.log("day in database less than today day");
     await prisma.user.update({
       where: {
         id: user.id
