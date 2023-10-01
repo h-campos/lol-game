@@ -59,7 +59,10 @@ export const GET = async(): Promise<NextResponse> => {
     });
   }
 
-  console.log(lastDayPlayed[1], today[1]);
+  console.log(lastDayPlayed[1], today[1], "month value");
+  console.log(lastDayPlayed[0], today[0], "day value");
+  console.log(lastDayPlayed, "last day played database value");
+  console.log(today, "today value");
 
   return new NextResponse("The player have to wait to replay the games", { status: 200 });
 };
