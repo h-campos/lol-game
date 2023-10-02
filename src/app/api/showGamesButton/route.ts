@@ -9,17 +9,18 @@ export const GET = async(): Promise<NextResponse> => {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "You are not authorized." }, { status: 401 });
 
-  const data = await prisma.user.findUnique({
+  const dataLastDayPlayed = await prisma.user.findUnique({
     where: { id: user.id },
     select: { lastDayPlayed: true }
   });
 
-  const lastDayPlayed = data?.lastDayPlayed;
+  const lastDayPlayed = dataLastDayPlayed?.lastDayPlayed;
   dayJS.tz(lastDayPlayed, "Europe/Paris");
 
   if (!lastDayPlayed) return NextResponse.json({ error: "No data found." }, { status: 404 });
 
   if ((dayJS(lastDayPlayed).get("date") < dayJS().get("date")) || (dayJS(lastDayPlayed).get("month") < dayJS().get("month"))) {
+    console.log("change");
     await prisma.user.update({
       where: {
         id: user.id
@@ -40,5 +41,9 @@ export const GET = async(): Promise<NextResponse> => {
     });
   }
 
-  return new NextResponse("The player have to wait to replay the games", { status: 200 });
+  const data = await prisma.user.findUnique({
+    where: { id: user.id }, include: { Games: true }
+  });
+
+  return NextResponse.json(data);
 };

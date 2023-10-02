@@ -20,7 +20,8 @@ export const versions = [
       "Change theme button.",
       "Fix color doesnt change on the changelog button and theme button when user switch theme.",
       "Fix the button to close the changelog modal.",
-      "Add a button to close the report/proposal modal."
+      "Add a button to close the report/proposal modal.",
+      "Fix bug when the user loose all attempts on blurry-champions"
     ]
   }
 ];

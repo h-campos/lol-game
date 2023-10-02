@@ -109,7 +109,6 @@ const BlurryChampions = (): ReactElement => {
         setIsLoading(true);
         await disableGameForDay();
         setIsLoading(false);
-        toggleDialogGame(false);
       } catch (error) {
         toggleDialogGame(false);
         toast({
