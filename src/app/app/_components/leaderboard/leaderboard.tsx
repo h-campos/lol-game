@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import { type ReactElement } from "react";
+import { type ReactElement, useState } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/lib/components/ui/tabs";
 import {
   Table,
@@ -17,12 +17,14 @@ import { fetcher } from "@/lib/utils/database/fetcher";
 import { Skeleton } from "@/lib/components/ui/skeleton";
 import { Badge } from "@/lib/components/ui/badge";
 import type { BlurryChampionsScore, PropsBlurryChampions } from "./leaderboard.type";
+import { Button } from "@/lib/components/ui/button";
 
 export const LeaderBoard = (): ReactElement => {
   const { data, isLoading } = useSwr<PropsBlurryChampions>("/api/getScore/blurryChampionsScore", fetcher);
+  const [showAllUsers, setShowAllUsers] = useState<boolean>(false);
 
   return (
-    <Card>
+    <Card className="relative">
       <CardHeader className="pb-4">
         <CardTitle>Leaderboard</CardTitle>
         <CardDescription>See who is the best player.</CardDescription>
@@ -51,8 +53,8 @@ export const LeaderBoard = (): ReactElement => {
                     <TableHead className="text-end">Score</TableHead>
                   </TableRow>
                 </TableHeader>
-                <TableBody>
-                  {data && data.map((score: BlurryChampionsScore, idx: number) => {
+                <TableBody className="relative">
+                  {data && data.slice(0, showAllUsers ? data.length : 4).map((score: BlurryChampionsScore, idx: number) => {
                     if (idx === 0 && score.blurryChampionsScore === 0) {
                       return <TableRowLeaderBoard key={idx}>
                         <TableCell>{score.username}</TableCell>
@@ -72,18 +74,25 @@ export const LeaderBoard = (): ReactElement => {
                         </TableCell>
                         <TableCell className="text-end rounded-tr-md rounded-br-md">{score.blurryChampionsScore}</TableCell>
                       </TableRowLeaderBoard>;
+                    } else {
+                      return <TableRowLeaderBoard key={idx}>
+                        <TableCell>{score.username}</TableCell>
+                        <TableCell className="text-end">{score.blurryChampionsScore}</TableCell>
+                      </TableRowLeaderBoard>;
                     }
-                    return <TableRowLeaderBoard key={idx}>
-                      <TableCell>{score.username}</TableCell>
-                      <TableCell className="text-end">{score.blurryChampionsScore}</TableCell>
-                    </TableRowLeaderBoard>;
                   })}
+                  <Button variant={"secondary"} className="absolute left-2/4 -translate-x-2/4 bottom-0 z-10" onClick={() => setShowAllUsers(!showAllUsers)}>
+                    {showAllUsers ? "Show less" : "Show more"}
+                  </Button>
                 </TableBody>
               </Table>
             )}
           </TabsContent>
         </Tabs>
       </CardContent>
+      {!showAllUsers && (
+        <div style={{ background: "linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(10, 10, 10, 1))" }} className="w-full h-52 bg-red-500 absolute bottom-0 rounded-br-lg rounded-bl-lg"></div>
+      )}
     </Card>
   );
 };

@@ -20,7 +20,6 @@ export const GET = async(): Promise<NextResponse> => {
   if (!lastDayPlayed) return NextResponse.json({ error: "No data found." }, { status: 404 });
 
   if ((dayJS(lastDayPlayed).get("date") < dayJS().get("date")) || (dayJS(lastDayPlayed).get("month") < dayJS().get("month"))) {
-    console.log("change");
     await prisma.user.update({
       where: {
         id: user.id
