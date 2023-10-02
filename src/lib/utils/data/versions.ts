@@ -15,7 +15,12 @@ export const versions = [
   {
     title: "v1.0.1",
     logs: [
-      "Remove the changelog button when the user is not connect because he can't click on it."
+      "Remove the changelog button when the user is not connect because he can't click on it.",
+      "Fix bug when month change the games button don't change.",
+      "Change theme button.",
+      "Fix color doesnt change on the changelog button and theme button when user switch theme.",
+      "Fix the button to close the changelog modal.",
+      "Add a button to close the report/proposal modal."
     ]
   }
 ];

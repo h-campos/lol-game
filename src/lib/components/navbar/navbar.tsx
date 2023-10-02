@@ -20,7 +20,7 @@ export const Navbar = (): ReactElement => {
       </Link>
       <div className="flex gap-2">
         {user && user !== "loading" && (
-          <Button variant={"outline"} onClick={() => {
+          <Button className="transition-colors text-neutral-950 dark:text-neutral-50" variant={"outline"} onClick={() => {
             toggle();
           }}>CHANGELOG</Button>
         )}
