@@ -20,8 +20,8 @@ const Home = (): ReactElement => {
 
 
   return (
-    <div className="w-2/4 flex items-center flex-col gap-2">
-      <h1 className="scroll-m-20 text-4xl font-semibold tracking-tight lg:text-5xl">
+    <div className="w-full mb:w-2/4 flex items-center flex-col gap-2">
+      <h1 className="scroll-m-20 text-4xl font-semibold tracking-tight lg:text-5xl md:text-left text-center">
         Welcome on <span className="font-extrabold text-titleHighlight">LOLGAMES</span>
       </h1>
       <p className="leading-7 [&:not(:first-child)]:mt-6 text-center text-lg line-clamp-2 mb-6">

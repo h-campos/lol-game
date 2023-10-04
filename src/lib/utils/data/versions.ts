@@ -13,7 +13,7 @@ export const versions = [
     ]
   },
   {
-    title: "v1.0.1",
+    title: "v1.4.6",
     logs: [
       "Remove the changelog button when the user is not connect because he can't click on it.",
       "Fix bug when month change the games button don't change.",
@@ -26,6 +26,12 @@ export const versions = [
       "Add suggestions on the input of the game blurry-champions.",
       "Add informations to know in how many time the user can play again to a game.",
       "Now the user cant cheat when he look in the console for the game blurry-champions."
+    ]
+  },
+  {
+    title: "v1.5.6",
+    logs: [
+      "Responsive design."
     ]
   }
 ];

@@ -19,12 +19,10 @@ import { Badge } from "@/lib/components/ui/badge";
 import type { BlurryChampionsScore, PropsBlurryChampions } from "./leaderboard.type";
 import { Button } from "@/lib/components/ui/button";
 import { twMerge } from "tailwind-merge";
-import { useTheme } from "next-themes";
 
 export const LeaderBoard = (): ReactElement => {
   const { data, isLoading } = useSwr<PropsBlurryChampions>("/api/getScore/blurryChampionsScore", fetcher);
   const [showAllUsers, setShowAllUsers] = useState<boolean>(false);
-  const { theme } = useTheme();
 
   return (
     <Card className="relative">
@@ -84,7 +82,7 @@ export const LeaderBoard = (): ReactElement => {
                       </TableRowLeaderBoard>;
                     }
                   })}
-                  <Button variant={"secondary"} className={twMerge("absolute left-2/4 -translate-x-2/4 bottom-0 z-10", showAllUsers ? "opacity-50" : "")} onClick={() => setShowAllUsers(!showAllUsers)}>
+                  <Button variant={"secondary"} className={twMerge("absolute left-2/4 -translate-x-2/4 bottom-6 md:bottom-0 z-10", showAllUsers ? "opacity-50" : "")} onClick={() => setShowAllUsers(!showAllUsers)}>
                     {showAllUsers ? "Show less" : "Show more"}
                   </Button>
                 </TableBody>
@@ -94,7 +92,7 @@ export const LeaderBoard = (): ReactElement => {
         </Tabs>
       </CardContent>
       {!showAllUsers && (
-        <div style={{ background: theme === "dark" ? "linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(10, 10, 10, 1))" : "linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(255, 255, 255, 1))" }} className="w-full h-52 absolute bottom-0 rounded-br-lg rounded-bl-lg"></div>
+        <div className="w-full h-52 absolute bottom-0 rounded-br-lg bg-bottom-leaderb-white dark:bg-bottom-leaderb-dark rounded-bl-lg"></div>
       )}
     </Card>
   );

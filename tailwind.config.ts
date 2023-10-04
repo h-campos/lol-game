@@ -79,6 +79,10 @@ module.exports = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "shaking": "shaking 0.3s ease-in-out"
+      },
+      backgroundImage: {
+        "bottom-leaderb-white": "linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(255, 255, 255, 1))",
+        "bottom-leaderb-dark": "linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(10, 10, 10, 1))"
       }
     }
   },
