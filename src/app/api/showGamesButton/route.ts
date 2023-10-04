@@ -19,7 +19,7 @@ export const GET = async(): Promise<NextResponse> => {
 
   if (!lastDayPlayed) return NextResponse.json({ error: "No data found." }, { status: 404 });
 
-  const difference = dayJS(lastDayPlayed).diff(dayJS().add(1, "day"));
+  const difference = dayJS(lastDayPlayed).diff(dayJS().add(1, "day").set("hour", 0).set("minute", 0).set("second", 0));
   const hoursDifference = dayJS.duration(difference).asHours();
   const hoursDifferenceNumber = Number(hoursDifference.toString().replace("-", "").split(".")[0]);
 
