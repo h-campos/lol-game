@@ -22,6 +22,7 @@ import useSwr from "swr";
 import type { Games, Prisma } from "@prisma/client";
 import { fetcher } from "@/lib/utils/database/fetcher";
 import { DialogReportProposalStore } from "@/lib/utils/stores/dialogReportProposalStore";
+import { SheetChangelogStore } from "@/lib/utils/stores/sheetChangelogStore";
 
 type Props = Prisma.UserGetPayload<{
   include: { Games: true };
@@ -32,6 +33,7 @@ export const NavbarMenu = (): ReactElement => {
   const { user, setUser } = useUserContext();
   const { data, isLoading } = useSwr<Props>("/api/showGamesButton", fetcher);
   const toggle = DialogReportProposalStore((state) => state.toggle);
+  const toggleChangelog = SheetChangelogStore((state) => state.toggle);
 
   return (
     <DropdownMenu>
@@ -79,6 +81,14 @@ export const NavbarMenu = (): ReactElement => {
         <DropdownMenuGroup>
           <DropdownMenuItem onClick={toggle}>
             Report / Proposal
+          </DropdownMenuItem>
+          <Link target="_blank" href={"https://github.com/Sakoutecher/lol-game"}>
+            <DropdownMenuItem>
+            Github repo
+            </DropdownMenuItem>
+          </Link>
+          <DropdownMenuItem onClick={toggleChangelog}>
+            Changelog
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
