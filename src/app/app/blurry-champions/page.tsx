@@ -163,14 +163,9 @@ const BlurryChampions = (): ReactElement => {
     if (localStorage.getItem("blurredChampions") && localStorage.getItem("answerBlurredChampions")) {
       setBlurredChampion(localStorage.getItem("blurredChampions") as string);
       setAnswerBlurredChampion(localStorage.getItem("answerBlurredChampions") as string);
-      if (localStorage.getItem("attemptsBlurryChampions") && localStorage.getItem("blur")) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        setAttempts(JSON.parse(localStorage.getItem("attemptsBlurryChampions") as string));
-        setBlur(parseInt(localStorage.getItem("blur") as string) - 10);
-      } else {
-        setBlur(50);
-        setAttempts([]);
-      }
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      setAttempts(JSON.parse(localStorage.getItem("attemptsBlurryChampions") as string));
+      setBlur(parseInt(localStorage.getItem("blur") as string) - 10);
       return;
     } else {
       const championSelected = getChampionsAssets(champions);
@@ -196,7 +191,7 @@ const BlurryChampions = (): ReactElement => {
   }, [blurredChampion, blur]);
 
   return (
-    <div className="md:w-2/4 w-full flex flex-col gap-2">
+    <div className="w-2/4 flex flex-col gap-2">
       <DialogGame title={titleDialog} description={descriptionDialog} loading={isLoading} result={result} />
       <Card>
         <CardHeader>
@@ -267,7 +262,7 @@ const BlurryChampions = (): ReactElement => {
         <Separator className="w-[94%] mx-auto" />
         <CardContent className="pt-6">
           <ul className="flex items-start gap-2 flex-col-reverse">
-            {attempts !== null && attempts.length > 0 ? attempts.map((attempt, index) => (
+            {attempts.length > 0 ? attempts.map((attempt, index) => (
               <Attempt key={index} championName={attempt} />
             )) : (<span className="text-sm text-neutral-500 dark:text-neutral-400">No attempts for the momment</span>)}
           </ul>

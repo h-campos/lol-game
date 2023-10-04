@@ -8,7 +8,7 @@ export const ColorsInformations = (): ReactElement => {
   return (
     <AlertDialog>
       <AlertDialogTrigger className="absolute top-3 right-6">
-        <Button className="md:flex hidden" variant="outline" size="icon">
+        <Button variant="outline" size="icon">
           <InfoCircledIcon />
         </Button>
       </AlertDialogTrigger>

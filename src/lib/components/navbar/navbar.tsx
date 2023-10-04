@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 "use client";
 
 import type { ReactElement } from "react";
@@ -21,12 +20,12 @@ export const Navbar = (): ReactElement => {
       </Link>
       <div className="flex gap-2">
         {user && user !== "loading" && (
-          <Button className="transition-colors text-neutral-950 dark:text-neutral-50 md:block hidden" variant={"outline"} onClick={() => {
+          <Button className="transition-colors text-neutral-950 dark:text-neutral-50" variant={"outline"} onClick={() => {
             toggle();
           }}>CHANGELOG</Button>
         )}
         <Link target="_blank" href={"https://github.com/Sakoutecher/lol-game"}>
-          <Button className="md:flex hidden" variant={"outline"} size={"icon"}><GitHubLogoIcon className="transition-colors text-neutral-950 dark:text-neutral-50" /></Button>
+          <Button variant={"outline"} size={"icon"}><GitHubLogoIcon className="transition-colors text-neutral-950 dark:text-neutral-50" /></Button>
         </Link>
         {user && user !== "loading" && (
           <>

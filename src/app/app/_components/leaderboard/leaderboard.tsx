@@ -19,12 +19,10 @@ import { Badge } from "@/lib/components/ui/badge";
 import type { BlurryChampionsScore, PropsBlurryChampions } from "./leaderboard.type";
 import { Button } from "@/lib/components/ui/button";
 import { twMerge } from "tailwind-merge";
-import { useTheme } from "next-themes";
 
 export const LeaderBoard = (): ReactElement => {
   const { data, isLoading } = useSwr<PropsBlurryChampions>("/api/getScore/blurryChampionsScore", fetcher);
   const [showAllUsers, setShowAllUsers] = useState<boolean>(false);
-  const { theme } = useTheme();
 
   return (
     <Card className="relative">
@@ -94,7 +92,7 @@ export const LeaderBoard = (): ReactElement => {
         </Tabs>
       </CardContent>
       {!showAllUsers && (
-        <div style={{ background: theme === "dark" ? "linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(10, 10, 10, 1))" : "linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(255, 255, 255, 1))" }} className="w-full h-52 absolute bottom-0 rounded-br-lg rounded-bl-lg"></div>
+        <div style={{ background: "linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(10, 10, 10, 1))" }} className="w-full h-52 bg-red-500 absolute bottom-0 rounded-br-lg rounded-bl-lg"></div>
       )}
     </Card>
   );

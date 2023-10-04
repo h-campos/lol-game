@@ -31,7 +31,7 @@ export const DialogReportProposal = (): ReactElement => {
 
   return (
     <Dialog open={isOpen}>
-      <DialogContent className="w-5/6 md:w-full rounded-lg">
+      <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Report / Proposal</DialogTitle>
           <DialogDescription>
@@ -42,7 +42,7 @@ export const DialogReportProposal = (): ReactElement => {
           <Label htmlFor="message">Your message</Label>
           <Textarea id="message" className="mt-2" placeholder="Type your message here..." onChange={(e) => setMessage(e.target.value)} />
         </div>
-        <DialogFooter className="gap-3">
+        <DialogFooter>
           <Button variant={"secondary"} onClick={() => toggle()}>Cancel</Button>
           {isLoading && (
             <Button disabled>Sending...</Button>

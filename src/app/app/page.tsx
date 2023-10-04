@@ -34,7 +34,7 @@ const Home = (): ReactElement => {
   }, [user]);
 
   return (
-    <div className="w-full md:w-2/4 flex flex-col gap-2">
+    <div className="w-2/4 flex flex-col gap-2">
       <Card>
         <CardHeader>
           <CardTitle className="mb-2 font-medium">Welcome on <span className="font-bold text-titleHighlight">LOLGAMES</span></CardTitle>

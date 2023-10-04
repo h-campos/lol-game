@@ -23,7 +23,7 @@ const RootLayout: Component<PropsWithChildren> = ({ children }) => {
     <html lang="en">
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         <UserProvider>
-          <body className={cn("bg-white dark:bg-zinc-950 p-6 md:p-10 flex justify-center items-center flex-col", os)}>
+          <body className={cn("bg-white dark:bg-zinc-950 p-10 flex justify-center items-center flex-col", os)}>
             <Navbar />
             {children}
             <Toaster />
