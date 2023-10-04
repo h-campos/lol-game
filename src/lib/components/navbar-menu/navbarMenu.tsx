@@ -30,7 +30,7 @@ type Props = Prisma.UserGetPayload<{
 export const NavbarMenu = (): ReactElement => {
   const supabase = createClientComponentClient();
   const { user, setUser } = useUserContext();
-  const { data, isLoading } = useSwr<Props>("/api/user", fetcher);
+  const { data, isLoading } = useSwr<Props>("/api/showGamesButton", fetcher);
   const toggle = DialogReportProposalStore((state) => state.toggle);
 
   return (

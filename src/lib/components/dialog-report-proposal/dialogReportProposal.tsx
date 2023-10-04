@@ -43,6 +43,7 @@ export const DialogReportProposal = (): ReactElement => {
           <Textarea id="message" className="mt-2" placeholder="Type your message here..." onChange={(e) => setMessage(e.target.value)} />
         </div>
         <DialogFooter>
+          <Button variant={"secondary"} onClick={() => toggle()}>Cancel</Button>
           {isLoading && (
             <Button disabled>Sending...</Button>
           )}

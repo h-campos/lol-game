@@ -9,18 +9,28 @@ export const GET = async(): Promise<NextResponse> => {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "You are not authorized." }, { status: 401 });
 
-  const data = await prisma.user.findUnique({
+  const dataLastDayPlayed = await prisma.user.findUnique({
     where: { id: user.id },
     select: { lastDayPlayed: true }
   });
 
-  const lastDayPlayed = data?.lastDayPlayed;
+  const lastDayPlayed = dataLastDayPlayed?.lastDayPlayed;
   dayJS.tz(lastDayPlayed, "Europe/Paris");
 
   if (!lastDayPlayed) return NextResponse.json({ error: "No data found." }, { status: 404 });
 
+  const difference = dayJS(lastDayPlayed).diff(dayJS().add(1, "day"));
+  const hoursDifference = dayJS.duration(difference).asHours();
+  const hoursDifferenceNumber = Number(hoursDifference.toString().replace("-", "").split(".")[0]);
+
+  await prisma.user.update({
+    where: { id: user.id },
+    data: {
+      timeLeft: hoursDifferenceNumber
+    }
+  });
+
   if ((dayJS(lastDayPlayed).get("date") < dayJS().get("date")) || (dayJS(lastDayPlayed).get("month") < dayJS().get("month"))) {
-    console.log("database day or month is lesser than today day or month");
     await prisma.user.update({
       where: {
         id: user.id
@@ -39,9 +49,11 @@ export const GET = async(): Promise<NextResponse> => {
         Games: true
       }
     });
-  } else {
-    console.log("database day or month is greater than today day or month, user have to wait to play again to the games");
   }
 
-  return new NextResponse("The player have to wait to replay the games", { status: 200 });
+  const data = await prisma.user.findUnique({
+    where: { id: user.id }, include: { Games: true }
+  });
+
+  return NextResponse.json(data);
 };

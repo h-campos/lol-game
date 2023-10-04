@@ -4,7 +4,7 @@
 import { useState, type ReactElement, useEffect, useRef } from "react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/lib/components/ui/card";
 import { twMerge } from "tailwind-merge";
-import Image from "next/image";
+// import Image from "next/image";
 import { getChampionsAssets } from "@/lib/utils/functions/getChampionsAssets";
 import { extractChampionName } from "@/lib/utils/functions/extractChampionName";
 import { champions } from "@/lib/utils/data-lol/champions";
@@ -31,11 +31,13 @@ const BlurryChampions = (): ReactElement => {
   const setAnswerBlurredChampion = AnswerBlurChampionStore((state) => state.setAnswerBlurredChampion);
   const answerBlurredChampion = AnswerBlurChampionStore((state) => state.answerBlurredChampion);
   const inputRef = useRef<HTMLInputElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const { toast } = useToast();
   const toggleDialogGame = DialogGameStore((state) => state.toggle);
   const [titleDialog, setTitleDialog] = useState<string>("");
   const [descriptionDialog, setDescriptionDialog] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
 
   const router = useRouter();
 
@@ -109,7 +111,6 @@ const BlurryChampions = (): ReactElement => {
         setIsLoading(true);
         await disableGameForDay();
         setIsLoading(false);
-        toggleDialogGame(false);
       } catch (error) {
         toggleDialogGame(false);
         toast({
@@ -142,11 +143,31 @@ const BlurryChampions = (): ReactElement => {
     input.value = "";
   };
 
+  const handleSuggestions = (): void => {
+    const input = inputRef.current;
+    if (!input) throw new Error("Input is not defined");
+    setSuggestions(champions.filter((champion) => champion.toLowerCase().startsWith(input.value.toLowerCase())));
+  };
+
   useEffect(() => {
     const championSelected = getChampionsAssets(champions);
     setBlurredChampion(championSelected);
     setAnswerBlurredChampion(extractChampionName(championSelected));
   }, [setAnswerBlurredChampion, setBlurredChampion]);
+
+  useEffect(() => {
+    const img = new Image();
+    img.src = blurredChampion;
+    if (!canvasRef.current) throw new Error("Canvas is not defined");
+    const context = canvasRef.current.getContext("2d");
+    canvasRef.current.width = 120;
+    canvasRef.current.height = 120;
+    if (context === null) throw new Error("Context is not defined");
+    context.filter = `blur(${blur}px)`;
+    img.onload = () => {
+      context?.drawImage(img, 0, 0);
+    };
+  }, [blurredChampion, blur]);
 
   return (
     <div className="w-2/4 flex flex-col gap-2">
@@ -176,19 +197,34 @@ const BlurryChampions = (): ReactElement => {
               )
             }
             >
-              <Image
+              {/* <Image
                 src={blurredChampion}
                 width={150}
                 height={150}
                 alt="Square assets of a champion of league of legends"
                 style={{ filter: `blur(${blur}px)` }}
                 className={"pointer-events-none"}
-              />
+              /> */}
+              <canvas width={120} height={120} ref={canvasRef}></canvas>
             </div>
             <div className="flex items-center space-x-2">
-              <Input ref={inputRef} type="text" placeholder="Champion name..." onKeyDown={(e) => {
-                if (e.key === "Enter") void handleClick();
-              }} />
+              <div className="relative">
+                <Input ref={inputRef} type="text" placeholder="Champion name..." onChange={handleSuggestions} onKeyDown={(e) => {
+                  if (e.key === "Enter") void handleClick();
+                }} />
+                {suggestions.length > 0 && inputRef?.current?.value !== "" && (
+                  <ul className="absolute top-12 right-0 max-h-32 w-full rounded-md overflow-y-scroll no-scrollbar border border-neutral-200 bg-white dark:bg-neutral-950 dark:border-neutral-800">
+                    {suggestions.map((suggestion, idx) => (
+                      <li className="w-full text-sm px-3 py-2 text-neutral-400 border-b border-neutral-200 dark:border-neutral-800 dark:hover:bg-neutral-800/50 cursor-pointer" key={idx} onClick={() => {
+                        const input = inputRef.current;
+                        if (!input) throw new Error("Input is not defined");
+                        input.value = suggestion;
+                        setSuggestions([]);
+                      }}>{suggestion}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
               <Button onClick={(e) => {
                 void handleClick();
                 e.preventDefault();
