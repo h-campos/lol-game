@@ -18,6 +18,7 @@ import { Skeleton } from "@/lib/components/ui/skeleton";
 import { Badge } from "@/lib/components/ui/badge";
 import type { BlurryChampionsScore, PropsBlurryChampions } from "./leaderboard.type";
 import { Button } from "@/lib/components/ui/button";
+import { twMerge } from "tailwind-merge";
 
 export const LeaderBoard = (): ReactElement => {
   const { data, isLoading } = useSwr<PropsBlurryChampions>("/api/getScore/blurryChampionsScore", fetcher);
@@ -81,7 +82,7 @@ export const LeaderBoard = (): ReactElement => {
                       </TableRowLeaderBoard>;
                     }
                   })}
-                  <Button variant={"secondary"} className="absolute left-2/4 -translate-x-2/4 bottom-0 z-10" onClick={() => setShowAllUsers(!showAllUsers)}>
+                  <Button variant={"secondary"} className={twMerge("absolute left-2/4 -translate-x-2/4 bottom-0 z-10", showAllUsers ? "opacity-50" : "")} onClick={() => setShowAllUsers(!showAllUsers)}>
                     {showAllUsers ? "Show less" : "Show more"}
                   </Button>
                 </TableBody>

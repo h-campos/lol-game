@@ -22,7 +22,8 @@ export const versions = [
       "Fix the button to close the changelog modal.",
       "Add a button to close the report/proposal modal.",
       "Fix bug when the user loose all attempts on blurry-champions.",
-      "Add button show more on the leaderboard."
+      "Add button show more on the leaderboard.",
+      "Add suggestions on the input of the game blurry-champions."
     ]
   }
 ];
