@@ -13,6 +13,7 @@ model User {
   username             String?
   lastDayPlayed        DateTime @updatedAt
   Games                Games[]
+  timeLeft             Int      @default(0)
   blurryChampionsScore Int      @default(0)
   spellsGuessingScore  Int      @default(0)
 }

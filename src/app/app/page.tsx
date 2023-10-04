@@ -53,7 +53,7 @@ const Home = (): ReactElement => {
                 <>
                   {data.Games.map((game: Games, idx: number) => {
                     if (game.status === "unavailable") {
-                      return (<Button key={idx} status={game.status} variant={"secondary"} disabled>{game.gameName}</Button>);
+                      return (<div className="relative" key={idx}><Button status={game.status} variant={"secondary"} disabled>{game.gameName}</Button><Badge className="absolute -top-3 -right-2">{data.timeLeft == 0 ? "less one hour left" : data.timeLeft.toString() + " hours left"}</Badge></div>);
                     } else if (game.status === "wip") {
                       return (<div className="relative" key={idx}><Button status={game.status} variant={"secondary"} disabled>{game.gameName}</Button><Badge className="absolute -top-3 -right-2">WIP</Badge></div>);
                     } else if (game.status === "available") {

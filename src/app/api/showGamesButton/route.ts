@@ -19,6 +19,17 @@ export const GET = async(): Promise<NextResponse> => {
 
   if (!lastDayPlayed) return NextResponse.json({ error: "No data found." }, { status: 404 });
 
+  const difference = dayJS(lastDayPlayed).diff(dayJS().add(1, "day"));
+  const hoursDifference = dayJS.duration(difference).asHours();
+  const hoursDifferenceNumber = Number(hoursDifference.toString().replace("-", "").split(".")[0]);
+
+  await prisma.user.update({
+    where: { id: user.id },
+    data: {
+      timeLeft: hoursDifferenceNumber
+    }
+  });
+
   if ((dayJS(lastDayPlayed).get("date") < dayJS().get("date")) || (dayJS(lastDayPlayed).get("month") < dayJS().get("month"))) {
     await prisma.user.update({
       where: {
