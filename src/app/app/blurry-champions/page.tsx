@@ -4,7 +4,7 @@
 import { useState, type ReactElement, useEffect, useRef } from "react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/lib/components/ui/card";
 import { twMerge } from "tailwind-merge";
-import Image from "next/image";
+// import Image from "next/image";
 import { getChampionsAssets } from "@/lib/utils/functions/getChampionsAssets";
 import { extractChampionName } from "@/lib/utils/functions/extractChampionName";
 import { champions } from "@/lib/utils/data-lol/champions";
@@ -31,6 +31,7 @@ const BlurryChampions = (): ReactElement => {
   const setAnswerBlurredChampion = AnswerBlurChampionStore((state) => state.setAnswerBlurredChampion);
   const answerBlurredChampion = AnswerBlurChampionStore((state) => state.answerBlurredChampion);
   const inputRef = useRef<HTMLInputElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const { toast } = useToast();
   const toggleDialogGame = DialogGameStore((state) => state.toggle);
   const [titleDialog, setTitleDialog] = useState<string>("");
@@ -154,6 +155,20 @@ const BlurryChampions = (): ReactElement => {
     setAnswerBlurredChampion(extractChampionName(championSelected));
   }, [setAnswerBlurredChampion, setBlurredChampion]);
 
+  useEffect(() => {
+    const img = new Image();
+    img.src = blurredChampion;
+    if (!canvasRef.current) throw new Error("Canvas is not defined");
+    const context = canvasRef.current.getContext("2d");
+    canvasRef.current.width = 120;
+    canvasRef.current.height = 120;
+    if (context === null) throw new Error("Context is not defined");
+    context.filter = `blur(${blur}px)`;
+    img.onload = () => {
+      context?.drawImage(img, 0, 0);
+    };
+  }, [blurredChampion, blur]);
+
   return (
     <div className="w-2/4 flex flex-col gap-2">
       <DialogGame title={titleDialog} description={descriptionDialog} loading={isLoading} result={result} />
@@ -182,14 +197,15 @@ const BlurryChampions = (): ReactElement => {
               )
             }
             >
-              <Image
+              {/* <Image
                 src={blurredChampion}
                 width={150}
                 height={150}
                 alt="Square assets of a champion of league of legends"
                 style={{ filter: `blur(${blur}px)` }}
                 className={"pointer-events-none"}
-              />
+              /> */}
+              <canvas width={120} height={120} ref={canvasRef}></canvas>
             </div>
             <div className="flex items-center space-x-2">
               <div className="relative">

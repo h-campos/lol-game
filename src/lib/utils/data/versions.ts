@@ -23,7 +23,8 @@ export const versions = [
       "Add a button to close the report/proposal modal.",
       "Fix bug when the user loose all attempts on blurry-champions.",
       "Add button show more on the leaderboard.",
-      "Add suggestions on the input of the game blurry-champions."
+      "Add suggestions on the input of the game blurry-champions.",
+      "Add informations to know in how many time the user can play again to a game."
     ]
   }
 ];
