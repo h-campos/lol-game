@@ -24,7 +24,8 @@ export const versions = [
       "Fix bug when the user loose all attempts on blurry-champions.",
       "Add button show more on the leaderboard.",
       "Add suggestions on the input of the game blurry-champions.",
-      "Add informations to know in how many time the user can play again to a game."
+      "Add informations to know in how many time the user can play again to a game.",
+      "Now the user cant cheat when he look in the console for the game blurry-champions."
     ]
   }
 ];
