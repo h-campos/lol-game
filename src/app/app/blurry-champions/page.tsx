@@ -81,6 +81,10 @@ const BlurryChampions = (): ReactElement => {
     toggleDialogGame(true);
     setTitleDialog("Congratulations");
     setDescriptionDialog("You won the game, you can now continue to play to the other games.");
+    localStorage.removeItem("blurredChampions");
+    localStorage.removeItem("answerBlurredChampions");
+    localStorage.removeItem("attemptsBlurryChampions");
+    localStorage.removeItem("blur");
     try {
       setIsLoading(true);
       await disableGameForDay();
@@ -101,12 +105,17 @@ const BlurryChampions = (): ReactElement => {
     setTimeout(() => {
       setAnimate(false);
     }, 500);
+    localStorage.setItem("blur", blur.toString());
     if (blur === 10) {
       setBlur(0);
       setResult("loose");
       toggleDialogGame(true);
       setTitleDialog("You loose");
       setDescriptionDialog("You lost the game, you can now continue to play to the other games. The champion was " + answerBlurredChampion + ".");
+      localStorage.removeItem("blurredChampions");
+      localStorage.removeItem("answerBlurredChampions");
+      localStorage.removeItem("attemptsBlurryChampions");
+      localStorage.removeItem("blur");
       try {
         setIsLoading(true);
         await disableGameForDay();
@@ -135,6 +144,7 @@ const BlurryChampions = (): ReactElement => {
     }
     const formattedInputValue = formatName(input.value);
     setAttempts((current) => [...current, formattedInputValue]);
+    localStorage.setItem("attemptsBlurryChampions", JSON.stringify([...attempts, formattedInputValue]));
     if (formattedInputValue === answerBlurredChampion) {
       await playerWin();
     } else {
@@ -150,9 +160,20 @@ const BlurryChampions = (): ReactElement => {
   };
 
   useEffect(() => {
-    const championSelected = getChampionsAssets(champions);
-    setBlurredChampion(championSelected);
-    setAnswerBlurredChampion(extractChampionName(championSelected));
+    if (localStorage.getItem("blurredChampions") && localStorage.getItem("answerBlurredChampions")) {
+      setBlurredChampion(localStorage.getItem("blurredChampions") as string);
+      setAnswerBlurredChampion(localStorage.getItem("answerBlurredChampions") as string);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      setAttempts(JSON.parse(localStorage.getItem("attemptsBlurryChampions") as string));
+      setBlur(parseInt(localStorage.getItem("blur") as string) - 10);
+      return;
+    } else {
+      const championSelected = getChampionsAssets(champions);
+      setBlurredChampion(championSelected);
+      setAnswerBlurredChampion(extractChampionName(championSelected));
+      localStorage.setItem("blurredChampions", championSelected);
+      localStorage.setItem("answerBlurredChampions", extractChampionName(championSelected));
+    }
   }, [setAnswerBlurredChampion, setBlurredChampion]);
 
   useEffect(() => {
