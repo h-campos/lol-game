@@ -22,7 +22,7 @@ export const DialogGame: Component<DialogGameProps> = ({ title, description, loa
 
   return (
     <Dialog open={isOpen}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="w-5/6 md:w-full rounded-lg">
         <DialogHeader className="relative">
           {result === "win" && (<ConfettiExplosion className="absolute top-2/4 left-2/4 z-50" particleCount={80} colors={["#63D5B7", "#66D5A7", "#6FD392", "#88CE8A"]} />)}
           <div className={twMerge("p-2 rounded-full absolute -top-9 -right-9 z-50", result === "win" ? "bg-emerald-500" : "bg-red-500")}>
@@ -43,13 +43,11 @@ export const DialogGame: Component<DialogGameProps> = ({ title, description, loa
               </svg>
             </Button>
           ) : (
-            <>
-              <Link href="/app">
-                <Button variant={"default"} size={"sm"}>
+            <Link href="/app">
+              <Button variant={"default"} size={"sm"}>
                   Continue
-                </Button>
-              </Link>
-            </>
+              </Button>
+            </Link>
           )}
         </DialogFooter>
       </DialogContent>
