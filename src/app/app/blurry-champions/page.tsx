@@ -46,6 +46,9 @@ const BlurryChampions = (): ReactElement => {
   useEffect(() => {
     toggleDialogGame(false);
     void isGameAvailable();
+    if (navigator.userAgent.search("Safari") >= 0 && navigator.userAgent.search("Chrome") < 0) {
+      alert("Browser is Safari");
+    }
   }, []);
 
   const isGameAvailable = async(): Promise<void> => {
