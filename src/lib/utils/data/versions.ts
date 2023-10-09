@@ -29,9 +29,10 @@ export const versions = [
     ]
   },
   {
-    title: "v1.5.6",
+    title: "v1.5.7",
     logs: [
-      "Responsive design."
+      "Responsive design.",
+      "Fix issue on safari mobile, the champ was not blurred."
     ]
   }
 ];
