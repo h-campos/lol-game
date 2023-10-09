@@ -20,6 +20,8 @@ import { DialogGame } from "@/lib/components/dialog-game";
 import { DialogGameStore } from "@/lib/utils/stores/dialogGameStore";
 import { calculateScore } from "@/lib/utils/functions/calculateScore";
 import { useRouter } from "next/navigation";
+import { decode } from "@/lib/utils/functions/decode";
+import { encode } from "@/lib/utils/functions/encode";
 
 const BlurryChampions = (): ReactElement => {
   const [animate, setAnimate] = useState<boolean>(false);
@@ -105,7 +107,7 @@ const BlurryChampions = (): ReactElement => {
     setTimeout(() => {
       setAnimate(false);
     }, 500);
-    localStorage.setItem("blur", blur.toString());
+    localStorage.setItem("blur", encode(blur.toString()));
     if (blur === 10) {
       setBlur(0);
       setResult("loose");
@@ -161,12 +163,12 @@ const BlurryChampions = (): ReactElement => {
 
   useEffect(() => {
     if (localStorage.getItem("blurredChampions") && localStorage.getItem("answerBlurredChampions")) {
-      setBlurredChampion(localStorage.getItem("blurredChampions") as string);
-      setAnswerBlurredChampion(localStorage.getItem("answerBlurredChampions") as string);
+      setBlurredChampion(decode(localStorage.getItem("blurredChampions") as string));
+      setAnswerBlurredChampion(decode(localStorage.getItem("answerBlurredChampions") as string));
       if (localStorage.getItem("attemptsBlurryChampions") && localStorage.getItem("blur")) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         setAttempts(JSON.parse(localStorage.getItem("attemptsBlurryChampions") as string));
-        setBlur(parseInt(localStorage.getItem("blur") as string) - 10);
+        setBlur(parseInt(decode(localStorage.getItem("blur") as string)) - 10);
       } else {
         setBlur(50);
         setAttempts([]);
@@ -176,8 +178,8 @@ const BlurryChampions = (): ReactElement => {
       const championSelected = getChampionsAssets(champions);
       setBlurredChampion(championSelected);
       setAnswerBlurredChampion(extractChampionName(championSelected));
-      localStorage.setItem("blurredChampions", championSelected);
-      localStorage.setItem("answerBlurredChampions", extractChampionName(championSelected));
+      localStorage.setItem("blurredChampions", encode(championSelected));
+      localStorage.setItem("answerBlurredChampions", encode(extractChampionName(championSelected)));
     }
   }, [setAnswerBlurredChampion, setBlurredChampion]);
 
