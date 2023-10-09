@@ -4,7 +4,7 @@
 import { useState, type ReactElement, useEffect, useRef } from "react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/lib/components/ui/card";
 import { twMerge } from "tailwind-merge";
-// import Image from "next/image";
+import NextImage from "next/image";
 import { getChampionsAssets } from "@/lib/utils/functions/getChampionsAssets";
 import { extractChampionName } from "@/lib/utils/functions/extractChampionName";
 import { champions } from "@/lib/utils/data-lol/champions";
@@ -40,6 +40,7 @@ const BlurryChampions = (): ReactElement => {
   const [descriptionDialog, setDescriptionDialog] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [safariBrowser, setSafariBrowser] = useState<boolean>(false);
 
   const router = useRouter();
 
@@ -47,7 +48,7 @@ const BlurryChampions = (): ReactElement => {
     toggleDialogGame(false);
     void isGameAvailable();
     if (navigator.userAgent.search("Safari") >= 0 && navigator.userAgent.search("Chrome") < 0) {
-      alert("Browser is Safari");
+      setSafariBrowser(true);
     }
   }, []);
 
@@ -228,15 +229,20 @@ const BlurryChampions = (): ReactElement => {
               )
             }
             >
-              {/* <Image
-                src={blurredChampion}
-                width={150}
-                height={150}
-                alt="Square assets of a champion of league of legends"
-                style={{ filter: `blur(${blur}px)` }}
-                className={"pointer-events-none"}
-              /> */}
-              <canvas width={120} height={120} ref={canvasRef}></canvas>
+              {
+                safariBrowser ? (
+                  <NextImage
+                    src={blurredChampion}
+                    width={150}
+                    height={150}
+                    alt="Square assets of a champion of league of legends"
+                    style={{ filter: `blur(${blur}px)` }}
+                    className={"pointer-events-none"}
+                  />
+                ) : (
+                  <canvas width={120} height={120} ref={canvasRef}></canvas>
+                )
+              }
             </div>
             <div className="flex items-center space-x-2">
               <div className="relative">
