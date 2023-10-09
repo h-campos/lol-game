@@ -188,6 +188,7 @@ const BlurryChampions = (): ReactElement => {
   }, [setAnswerBlurredChampion, setBlurredChampion]);
 
   useEffect(() => {
+    if (safariBrowser) return;
     const img = new Image();
     img.src = blurredChampion;
     if (!canvasRef.current) throw new Error("Canvas is not defined");
@@ -199,7 +200,7 @@ const BlurryChampions = (): ReactElement => {
     img.onload = () => {
       context?.drawImage(img, 0, 0);
     };
-  }, [blurredChampion, blur]);
+  }, [blurredChampion, blur, safariBrowser]);
 
   return (
     <div className="md:w-2/4 w-full flex flex-col gap-2">
