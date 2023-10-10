@@ -7,7 +7,6 @@ import { Open_Sans } from "next/font/google";
 import type { Metadata } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/lib/components/ui/theme-provider";
-import { Navbar } from "@/lib/components/navbar/navbar";
 import { Toaster } from "@/lib/components/ui/toaster";
 import { UserProvider } from "@/lib/utils/contexts/user-provider";
 
@@ -24,7 +23,6 @@ const RootLayout: Component<PropsWithChildren> = ({ children }) => {
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         <UserProvider>
           <body className={cn("bg-white dark:bg-zinc-950 p-6 md:p-10 flex justify-center items-center flex-col", os)}>
-            <Navbar />
             {children}
             <Toaster />
           </body>
