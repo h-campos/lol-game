@@ -34,6 +34,7 @@ const BlurryChampions = (): ReactElement => {
   const answerBlurredChampion = AnswerBlurChampionStore((state) => state.answerBlurredChampion);
   const inputRef = useRef<HTMLInputElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const suggestionList = useRef<HTMLUListElement>(null);
   const { toast } = useToast();
   const toggleDialogGame = DialogGameStore((state) => state.toggle);
   const [titleDialog, setTitleDialog] = useState<string>("");
@@ -165,6 +166,50 @@ const BlurryChampions = (): ReactElement => {
     setSuggestions(champions.filter((champion) => champion.toLowerCase().startsWith(input.value.toLowerCase())));
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>): void => {
+    if (e.key === "Enter") {
+      void handleClick();
+    } else if (e.key === "ArrowDown") {
+      e.preventDefault();
+      if (suggestionList !== null) {
+        if (suggestionList.current && suggestionList.current.children && suggestionList.current.children.length > 0) {
+          (suggestionList.current.children[0] as HTMLLIElement).focus();
+        }
+      }
+    }
+  };
+
+  const handleSuggestionKeyDown = (
+    e: React.KeyboardEvent<HTMLLIElement>,
+    suggestion: string
+  ): void => {
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+      const currentIndex = suggestions.indexOf(suggestion);
+      if (currentIndex > 0) {
+        if (suggestionList.current && suggestionList.current.children && suggestionList.current.children.length > 0) {
+          (suggestionList.current.children[currentIndex - 1] as HTMLLIElement).focus();
+        }
+      }
+    } else if (e.key === "ArrowDown") {
+      e.preventDefault();
+      const currentIndex = suggestions.indexOf(suggestion);
+      if (currentIndex < suggestions.length - 1) {
+        if (suggestionList.current && suggestionList.current.children && suggestionList.current.children.length > 0) {
+          (suggestionList.current.children[currentIndex + 1] as HTMLLIElement).focus();
+        }
+      }
+    } else if (e.key === "Enter") {
+
+      const input = inputRef.current;
+      if (input) {
+        input.value = suggestion;
+        setSuggestions([]);
+        input.focus();
+      }
+    }
+  };
+
   useEffect(() => {
     if (localStorage.getItem("blurredChampions") && localStorage.getItem("answerBlurredChampions")) {
       setBlurredChampion(decode(localStorage.getItem("blurredChampions") as string));
@@ -247,18 +292,34 @@ const BlurryChampions = (): ReactElement => {
             </div>
             <div className="flex items-center space-x-2">
               <div className="relative">
-                <Input ref={inputRef} type="text" placeholder="Champion name..." onChange={handleSuggestions} onKeyDown={(e) => {
-                  if (e.key === "Enter") void handleClick();
-                }} />
+                <Input
+                  ref={inputRef}
+                  type="text"
+                  placeholder="Champion name..."
+                  onChange={handleSuggestions}
+                  onKeyDown={handleKeyDown}
+                />
                 {suggestions.length > 0 && inputRef?.current?.value !== "" && (
-                  <ul tabIndex={0} className="absolute top-12 right-0 max-h-32 w-full rounded-md overflow-y-scroll no-scrollbar border border-neutral-200 bg-white dark:bg-neutral-950 dark:border-neutral-800">
+                  <ul
+                    id="suggestion-list"
+                    className="absolute top-12 right-0 max-h-32 w-full rounded-md overflow-y-scroll no-scrollbar border border-neutral-200 bg-white dark:bg-neutral-950 dark:border-neutral-800"
+                    ref={suggestionList}
+                  >
                     {suggestions.map((suggestion, idx) => (
-                      <li tabIndex={idx} className="w-full text-sm px-3 py-2 text-neutral-400 border-b border-neutral-200 dark:border-neutral-800 dark:hover:bg-neutral-800/50 cursor-pointer" key={idx} onClick={() => {
-                        const input = inputRef.current;
-                        if (!input) throw new Error("Input is not defined");
-                        input.value = suggestion;
-                        setSuggestions([]);
-                      }}>{suggestion}</li>
+                      <li
+                        tabIndex={idx}
+                        className="w-full text-sm px-3 py-2 text-neutral-400 border-b border-neutral-200 dark:border-neutral-800 dark:hover:bg-neutral-800/50 cursor-pointer dark:focus-visible:bg-neutral-800/50 outline-none hover:bg-neutral-200/50 focus-visible:bg-neutral-200/50"
+                        key={idx}
+                        onClick={() => {
+                          const input = inputRef.current;
+                          if (!input) throw new Error("Input is not defined");
+                          input.value = suggestion;
+                          setSuggestions([]);
+                        }}
+                        onKeyDown={(e) => handleSuggestionKeyDown(e, suggestion)}
+                      >
+                        {suggestion}
+                      </li>
                     ))}
                   </ul>
                 )}
