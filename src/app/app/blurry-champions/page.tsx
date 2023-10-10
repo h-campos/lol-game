@@ -251,9 +251,9 @@ const BlurryChampions = (): ReactElement => {
                   if (e.key === "Enter") void handleClick();
                 }} />
                 {suggestions.length > 0 && inputRef?.current?.value !== "" && (
-                  <ul className="absolute top-12 right-0 max-h-32 w-full rounded-md overflow-y-scroll no-scrollbar border border-neutral-200 bg-white dark:bg-neutral-950 dark:border-neutral-800">
+                  <ul tabIndex={0} className="absolute top-12 right-0 max-h-32 w-full rounded-md overflow-y-scroll no-scrollbar border border-neutral-200 bg-white dark:bg-neutral-950 dark:border-neutral-800">
                     {suggestions.map((suggestion, idx) => (
-                      <li className="w-full text-sm px-3 py-2 text-neutral-400 border-b border-neutral-200 dark:border-neutral-800 dark:hover:bg-neutral-800/50 cursor-pointer" key={idx} onClick={() => {
+                      <li tabIndex={idx} className="w-full text-sm px-3 py-2 text-neutral-400 border-b border-neutral-200 dark:border-neutral-800 dark:hover:bg-neutral-800/50 cursor-pointer" key={idx} onClick={() => {
                         const input = inputRef.current;
                         if (!input) throw new Error("Input is not defined");
                         input.value = suggestion;
