@@ -6,7 +6,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/lib
 import { twMerge } from "tailwind-merge";
 import NextImage from "next/image";
 import { getChampionsAssets } from "@/lib/utils/functions/getChampionsAssets";
-import { extractChampionName } from "@/lib/utils/functions/extractChampionName";
+import { extractChampionNameBlur } from "@/lib/utils/functions/extractChampionName";
 import { champions } from "@/lib/utils/data-lol/champions";
 import { BlurChampionStore } from "@/lib/utils/stores/blurChampionStore";
 import { AnswerBlurChampionStore } from "@/lib/utils/stores/answerBlurChampionStore";
@@ -226,9 +226,9 @@ const BlurryChampions = (): ReactElement => {
     } else {
       const championSelected = getChampionsAssets(champions);
       setBlurredChampion(championSelected);
-      setAnswerBlurredChampion(extractChampionName(championSelected));
+      setAnswerBlurredChampion(extractChampionNameBlur(championSelected));
       localStorage.setItem("blurredChampions", encode(championSelected));
-      localStorage.setItem("answerBlurredChampions", encode(extractChampionName(championSelected)));
+      localStorage.setItem("answerBlurredChampions", encode(extractChampionNameBlur(championSelected)));
     }
   }, [setAnswerBlurredChampion, setBlurredChampion]);
 
