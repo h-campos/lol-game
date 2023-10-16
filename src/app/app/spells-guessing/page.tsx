@@ -22,6 +22,8 @@ import { DialogGameStore } from "@/lib/utils/stores/dialogGameStore";
 import { DialogGame } from "@/lib/components/dialog-game";
 import { calculateScore } from "@/lib/utils/functions/calculateScore";
 import { useRouter } from "next/navigation";
+import { decode } from "@/lib/utils/functions/decode";
+import { encode } from "@/lib/utils/functions/encode";
 
 const SpellsGuessing = (): ReactElement => {
   const setSpellImg = SpellsGuessingStore((state) => state.setSpellImg);
@@ -170,6 +172,7 @@ const SpellsGuessing = (): ReactElement => {
     }
     const formattedInputValue = formatName(input.value);
     setAttempts((current) => [...current, formattedInputValue]);
+    localStorage.setItem("attemptsSpellsGuessing", JSON.stringify([...attempts, formattedInputValue]));
     if (formattedInputValue === answerChampion) {
       playerWinChampions();
     } else {
@@ -191,6 +194,7 @@ const SpellsGuessing = (): ReactElement => {
 
   const playerLooseChampions = async(): Promise<void> => {
     setChance((current) => current - 1);
+    localStorage.setItem("chanceSpellsGuessing", encode((chance - 1).toString()));
     setAnimate(true);
     setTimeout(() => {
       setAnimate(false);
@@ -200,6 +204,12 @@ const SpellsGuessing = (): ReactElement => {
       setResult("loose");
       setTitleDialog("You loose");
       setDescriptionDialog("You lost the game, you can now continue to play to the other games.");
+      localStorage.removeItem("answerChampion");
+      localStorage.removeItem("spellImg");
+      localStorage.removeItem("answerSpell");
+      localStorage.removeItem("attemptsSpellsGuessing");
+      localStorage.removeItem("chanceSpellsGuessing");
+      toggleDialogGame(true);
       try {
         setIsLoading(true);
         await disableGameForDay();
@@ -220,6 +230,11 @@ const SpellsGuessing = (): ReactElement => {
       toggleDialogGame(true);
       setTitleDialog("Congratulations");
       setDescriptionDialog("You won the game, you can now continue to play to the other games.");
+      localStorage.removeItem("answerChampion");
+      localStorage.removeItem("spellImg");
+      localStorage.removeItem("answerSpell");
+      localStorage.removeItem("attemptsSpellsGuessing");
+      localStorage.removeItem("chanceSpellsGuessing");
       try {
         setIsLoading(true);
         await disableGameForDayPlusOnePoint();
@@ -237,6 +252,11 @@ const SpellsGuessing = (): ReactElement => {
       setResult("loose");
       setTitleDialog("You loose");
       setDescriptionDialog("You lost, you didnt fin wich spell it was, you can now continue to play to the other games.");
+      localStorage.removeItem("answerChampion");
+      localStorage.removeItem("spellImg");
+      localStorage.removeItem("answerSpell");
+      localStorage.removeItem("attemptsSpellsGuessing");
+      localStorage.removeItem("chanceSpellsGuessing");
       try {
         setIsLoading(true);
         await disableGameForDay();
@@ -253,17 +273,34 @@ const SpellsGuessing = (): ReactElement => {
   };
 
   useEffect(() => {
-    const championSelected = getChampionsDataUrl(champions);
-    setAnswerChampion(extractChampionNameData(championSelected));
-    getChampionsSpells(championSelected)
-      .then((spells) => {
-        const infoSpell = getOneSpell(spells);
-        setSpellImg(infoSpell.spell.image.full);
-        setAnswerSpell(fromNumberToLetterSpells(infoSpell.random));
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    if (localStorage.getItem("answerSpell") && localStorage.getItem("answerChampion") && localStorage.getItem("spellImg")) {
+      setAnswerSpell(decode(localStorage.getItem("answerSpell") as string));
+      setAnswerChampion(decode(localStorage.getItem("answerChampion") as string));
+      setSpellImg(decode(localStorage.getItem("spellImg") as string));
+      if (localStorage.getItem("attemptsSpellsGuessing") && localStorage.getItem("chanceSpellsGuessing")) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        setAttempts(JSON.parse(localStorage.getItem("attemptsSpellsGuessing") as string));
+        setChance(parseInt(decode(localStorage.getItem("chanceSpellsGuessing") as string)));
+      } else {
+        setAttempts([]);
+      }
+      return;
+    } else {
+      const championSelected = getChampionsDataUrl(champions);
+      setAnswerChampion(extractChampionNameData(championSelected));
+      localStorage.setItem("answerChampion", encode(extractChampionNameData(championSelected)));
+      getChampionsSpells(championSelected)
+        .then((spells) => {
+          const infoSpell = getOneSpell(spells);
+          localStorage.setItem("spellImg", encode(infoSpell.spell.image.full));
+          setSpellImg(infoSpell.spell.image.full);
+          localStorage.setItem("answerSpell", encode(fromNumberToLetterSpells(infoSpell.random)));
+          setAnswerSpell(fromNumberToLetterSpells(infoSpell.random));
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
   }, [setAnswerChampion, setSpellImg, setAnswerSpell]);
 
   return (
