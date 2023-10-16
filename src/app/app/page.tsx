@@ -27,6 +27,16 @@ const Home = (): ReactElement => {
   const { user } = useUserContext();
   const { data, isLoading } = useSwr<Props>("/api/showGamesButton", fetcher);
 
+  const addNewGame = async(): Promise<void> => {
+    await fetch("/api/addNewGame", {
+      method: "GET"
+    });
+  };
+
+  useEffect(() => {
+    void addNewGame();
+  }, []);
+
   useEffect(() => {
     if (user === null) {
       redirect("/");
