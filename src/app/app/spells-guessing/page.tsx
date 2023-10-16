@@ -20,6 +20,8 @@ import { useToast } from "@/lib/utils/hooks/use-toasts";
 import { formatName } from "@/lib/utils/functions/formatName";
 import { DialogGameStore } from "@/lib/utils/stores/dialogGameStore";
 import { DialogGame } from "@/lib/components/dialog-game";
+import { calculateScore } from "@/lib/utils/functions/calculateScore";
+import { useRouter } from "next/navigation";
 
 const SpellsGuessing = (): ReactElement => {
   const setSpellImg = SpellsGuessingStore((state) => state.setSpellImg);
@@ -40,6 +42,32 @@ const SpellsGuessing = (): ReactElement => {
   const [descriptionDialog, setDescriptionDialog] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const toggleDialogGame = DialogGameStore((state) => state.toggle);
+  const [showSpellGuess, setShowSpellGuess] = useState<boolean>(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    toggleDialogGame(false);
+    void isGameAvailable();
+  }, []);
+
+  const isGameAvailable = async(): Promise<void> => {
+    const response = await fetch("/api/gameIsAvailable", {
+      method: "POST",
+      body: JSON.stringify({
+        gameName: "Spells Guessing"
+      }),
+      headers: { "Content-Type": "application/json" }
+    });
+    const data = await response.json() as string;
+    if (data === "unavailable") {
+      router.push("/app");
+      toast({
+        title: "Oops...",
+        description: "You already played this game today, please come back tomorow !",
+        variant: "default"
+      });
+    }
+  };
 
   const fromNumberToLetterSpells = (number: number): string => {
     switch (number) {
@@ -105,6 +133,30 @@ const SpellsGuessing = (): ReactElement => {
     }
   };
 
+  const disableGameForDay = async(): Promise<void> => {
+    const scoreChampions = calculateScore(attempts.length);
+    await fetch("/api/stateScoreSpellsGuessing", {
+      method: "POST",
+      body: JSON.stringify({
+        scoreChampions: scoreChampions,
+        scoreSpellsGuessing: 0
+      }),
+      headers: { "Content-Type": "application/json" }
+    });
+  };
+
+  const disableGameForDayPlusOnePoint = async(): Promise<void> => {
+    const scoreChampions = calculateScore(attempts.length);
+    await fetch("/api/stateScoreSpellsGuessing", {
+      method: "POST",
+      body: JSON.stringify({
+        scoreChampions: scoreChampions,
+        scoreSpellsGuessing: 1
+      }),
+      headers: { "Content-Type": "application/json" }
+    });
+  };
+
   const handleClick = async(): Promise<void> => {
     const input = inputRef.current;
     if (!input) throw new Error("Input is not defined");
@@ -119,16 +171,22 @@ const SpellsGuessing = (): ReactElement => {
     const formattedInputValue = formatName(input.value);
     setAttempts((current) => [...current, formattedInputValue]);
     if (formattedInputValue === answerChampion) {
-      await playerWinChampions();
+      playerWinChampions();
     } else {
       await playerLooseChampions();
     }
     input.value = "";
   };
 
-  const playerWinChampions = async(): Promise<void> => {
+  const playerWinChampions = (): void => {
     setResult("win");
     setChance(0);
+    setShowSpellGuess(true);
+    toast({
+      title: "Well played",
+      description: "Try to find the wich spell it is now in the card below the spell image.",
+      variant: "success"
+    });
   };
 
   const playerLooseChampions = async(): Promise<void> => {
@@ -140,6 +198,57 @@ const SpellsGuessing = (): ReactElement => {
     if (chance == 1) {
       setChance(0);
       setResult("loose");
+      setTitleDialog("You loose");
+      setDescriptionDialog("You lost the game, you can now continue to play to the other games.");
+      try {
+        setIsLoading(true);
+        await disableGameForDay();
+        setIsLoading(false);
+      } catch (error) {
+        toggleDialogGame(false);
+        toast({
+          title: "Oops...",
+          description: "Something gone wrong, please contact the administrator.",
+          variant: "default"
+        });
+      }
+    }
+  };
+
+  const handleClickSpellsButton = async(spell: string): Promise<void> => {
+    if (spell === answerSpell) {
+      toggleDialogGame(true);
+      setTitleDialog("Congratulations");
+      setDescriptionDialog("You won the game, you can now continue to play to the other games.");
+      try {
+        setIsLoading(true);
+        await disableGameForDayPlusOnePoint();
+        setIsLoading(false);
+      } catch (error) {
+        toggleDialogGame(false);
+        toast({
+          title: "Oops...",
+          description: "Something gone wrong, please contact the administrator.",
+          variant: "default"
+        });
+      }
+    } else {
+      toggleDialogGame(true);
+      setResult("loose");
+      setTitleDialog("You loose");
+      setDescriptionDialog("You lost, you didnt fin wich spell it was, you can now continue to play to the other games.");
+      try {
+        setIsLoading(true);
+        await disableGameForDay();
+        setIsLoading(false);
+      } catch (error) {
+        toggleDialogGame(false);
+        toast({
+          title: "Oops...",
+          description: "Something gone wrong, please contact the administrator.",
+          variant: "default"
+        });
+      }
     }
   };
 
@@ -155,7 +264,7 @@ const SpellsGuessing = (): ReactElement => {
       .catch((error) => {
         console.error(error);
       });
-  }, []);
+  }, [setAnswerChampion, setSpellImg, setAnswerSpell]);
 
   return (
     <div className="md:w-2/4 w-full flex flex-col gap-2">
@@ -198,6 +307,7 @@ const SpellsGuessing = (): ReactElement => {
                   placeholder="Champion name..."
                   onChange={handleSuggestions}
                   onKeyDown={handleKeyDown}
+                  disabled={showSpellGuess}
                 />
                 {suggestions.length > 0 && inputRef?.current?.value !== "" && (
                   <ul
@@ -224,25 +334,42 @@ const SpellsGuessing = (): ReactElement => {
                   </ul>
                 )}
               </div>
-              <Button onClick={() => void handleClick()}>Submit</Button>
+              <Button disabled={showSpellGuess} onClick={() => void handleClick()}>Submit</Button>
             </div>
           </div>
         </CardHeader>
       </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle>Attempts</CardTitle>
-          <CardDescription>You can see here all your attempts for this games</CardDescription>
-        </CardHeader>
-        <Separator className="w-[94%] mx-auto" />
-        <CardContent className="pt-6">
-          <ul className="flex items-start gap-2 flex-col-reverse">
-            {attempts !== null && attempts.length > 0 ? attempts.map((attempt, index) => (
-              <AttemptSpellsGuessing key={index} championName={attempt} />
-            )) : (<span className="text-sm text-neutral-500 dark:text-neutral-400">No attempts for the momment</span>)}
-          </ul>
-        </CardContent>
-      </Card>
+      {showSpellGuess && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Wich spell it is ?</CardTitle>
+            <CardDescription>Now you can try to guess wich spell it is, if you find it you will get one more point !</CardDescription>
+          </CardHeader>
+          <Separator className="w-[94%] mx-auto" />
+          <CardContent className="pt-6 flex justify-start items-center gap-8">
+            <Button variant={"outline"} onClick={() => void handleClickSpellsButton("Q")}>Q</Button>
+            <Button variant={"outline"} onClick={() => void handleClickSpellsButton("W")}>W</Button>
+            <Button variant={"outline"} onClick={() => void handleClickSpellsButton("E")}>E</Button>
+            <Button variant={"outline"} onClick={() => void handleClickSpellsButton("R")}>R</Button>
+          </CardContent>
+        </Card>
+      )}
+      {!showSpellGuess && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Attempts</CardTitle>
+            <CardDescription>You can see here all your attempts for this games</CardDescription>
+          </CardHeader>
+          <Separator className="w-[94%] mx-auto" />
+          <CardContent className="pt-6">
+            <ul className="flex items-start gap-2 flex-col-reverse">
+              {attempts !== null && attempts.length > 0 ? attempts.map((attempt, index) => (
+                <AttemptSpellsGuessing key={index} championName={attempt} />
+              )) : (<span className="text-sm text-neutral-500 dark:text-neutral-400">No attempts for the momment</span>)}
+            </ul>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 };
