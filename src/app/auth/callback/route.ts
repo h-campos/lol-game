@@ -32,8 +32,14 @@ export const GET = async(request: NextRequest): Promise<NextResponse> => {
             {
               id: Math.random().toString(36).substring(7).toString(),
               gameName: "Spells Guessing",
-              status: "wip",
+              status: "available",
               gamePath: "/app/spells-guessing"
+            },
+            {
+              id: Math.random().toString(36).substring(7).toString(),
+              gameName: "Objects Cost",
+              status: "wip",
+              gamePath: "/app/objects-cost"
             }
           ]
         }

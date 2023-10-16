@@ -9,6 +9,8 @@ export const calculateScore = (value: number): number | undefined => {
     return 2;
   } else if (value === 4) {
     return 1;
+  } else if (value === 5) {
+    return 0;
   } else {
     return 100;
   }

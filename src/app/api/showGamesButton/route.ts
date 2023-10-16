@@ -38,7 +38,7 @@ export const GET = async(): Promise<NextResponse> => {
       data: {
         Games: {
           updateMany: {
-            where: { gameName: "Blurry Champions" },
+            where: { gameName: "Blurry Champions" && "Spells Guessing" },
             data: {
               status: "available"
             }

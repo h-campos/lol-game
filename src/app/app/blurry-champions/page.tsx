@@ -6,7 +6,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/lib
 import { twMerge } from "tailwind-merge";
 import NextImage from "next/image";
 import { getChampionsAssets } from "@/lib/utils/functions/getChampionsAssets";
-import { extractChampionName } from "@/lib/utils/functions/extractChampionName";
+import { extractChampionNameBlur } from "@/lib/utils/functions/extractChampionName";
 import { champions } from "@/lib/utils/data-lol/champions";
 import { BlurChampionStore } from "@/lib/utils/stores/blurChampionStore";
 import { AnswerBlurChampionStore } from "@/lib/utils/stores/answerBlurChampionStore";
@@ -14,7 +14,7 @@ import { Input } from "@/lib/components/ui/input";
 import { Button } from "@/lib/components/ui/button";
 import { formatName } from "@/lib/utils/functions/formatName";
 import { Separator } from "@/lib/components/ui/separator";
-import { Attempt } from "@/lib/components/attempt";
+import { AttemptBlurryChampions } from "@/lib/components/attempt";
 import { useToast } from "@/lib/utils/hooks/use-toasts";
 import { DialogGame } from "@/lib/components/dialog-game";
 import { DialogGameStore } from "@/lib/utils/stores/dialogGameStore";
@@ -226,9 +226,9 @@ const BlurryChampions = (): ReactElement => {
     } else {
       const championSelected = getChampionsAssets(champions);
       setBlurredChampion(championSelected);
-      setAnswerBlurredChampion(extractChampionName(championSelected));
+      setAnswerBlurredChampion(extractChampionNameBlur(championSelected));
       localStorage.setItem("blurredChampions", encode(championSelected));
-      localStorage.setItem("answerBlurredChampions", encode(extractChampionName(championSelected)));
+      localStorage.setItem("answerBlurredChampions", encode(extractChampionNameBlur(championSelected)));
     }
   }, [setAnswerBlurredChampion, setBlurredChampion]);
 
@@ -341,7 +341,7 @@ const BlurryChampions = (): ReactElement => {
         <CardContent className="pt-6">
           <ul className="flex items-start gap-2 flex-col-reverse">
             {attempts !== null && attempts.length > 0 ? attempts.map((attempt, index) => (
-              <Attempt key={index} championName={attempt} />
+              <AttemptBlurryChampions key={index} championName={attempt} />
             )) : (<span className="text-sm text-neutral-500 dark:text-neutral-400">No attempts for the momment</span>)}
           </ul>
         </CardContent>
