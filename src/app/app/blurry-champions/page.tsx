@@ -14,7 +14,7 @@ import { Input } from "@/lib/components/ui/input";
 import { Button } from "@/lib/components/ui/button";
 import { formatName } from "@/lib/utils/functions/formatName";
 import { Separator } from "@/lib/components/ui/separator";
-import { Attempt } from "@/lib/components/attempt";
+import { AttemptBlurryChampions } from "@/lib/components/attempt";
 import { useToast } from "@/lib/utils/hooks/use-toasts";
 import { DialogGame } from "@/lib/components/dialog-game";
 import { DialogGameStore } from "@/lib/utils/stores/dialogGameStore";
@@ -341,7 +341,7 @@ const BlurryChampions = (): ReactElement => {
         <CardContent className="pt-6">
           <ul className="flex items-start gap-2 flex-col-reverse">
             {attempts !== null && attempts.length > 0 ? attempts.map((attempt, index) => (
-              <Attempt key={index} championName={attempt} />
+              <AttemptBlurryChampions key={index} championName={attempt} />
             )) : (<span className="text-sm text-neutral-500 dark:text-neutral-400">No attempts for the momment</span>)}
           </ul>
         </CardContent>

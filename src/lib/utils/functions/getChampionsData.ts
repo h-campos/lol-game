@@ -1,5 +1,7 @@
 import { randomSelect } from "@/lib/utils/functions/randomSelect";
 import { extractChampionNameData } from "./extractChampionName";
+import type { ChampionsDataType } from "@/config/types/championsData.type";
+import type { SpellsEntity } from "@/config/types/championsData.type";
 
 export const getChampionsDataUrl = (champions: string[]): string => {
   const championsData = champions[randomSelect(champions)];
@@ -7,18 +9,14 @@ export const getChampionsDataUrl = (champions: string[]): string => {
   return url;
 };
 
-export const getChampionsSpells = async(url: string): Promise<any[]> => {
+export const getChampionsSpells = async(url: string): Promise<SpellsEntity[]> => {
   const champion = extractChampionNameData(url);
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return
-  const response = await fetch(url).then((res) => res.json()).then((data) => data.data[champion].spells);
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  const response = await fetch(url).then((res) => res.json()).then((data: ChampionsDataType) => data.data[champion].spells) as SpellsEntity[];
   return response;
 };
 
-export const getOneSpell = (spells: any[]): any => {
+export const getOneSpell = (spells: Array<SpellsEntity>): {spell: SpellsEntity; random: number} => {
   const random = randomSelect(spells);
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const spell = spells[random];
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   return { spell, random };
 };
