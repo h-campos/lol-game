@@ -34,20 +34,22 @@ export const LeaderBoard = (): ReactElement => {
       <Separator className="w-[94%] mx-auto" />
       <CardContent className="pt-4">
         <Tabs defaultValue="blurry-champions">
-          <TabsList className="mb-2">
-            <TabsTrigger value="blurry-champions">
+          <div className="w-full sm:overflow-visible overflow-x-scroll overflow-y-visible">
+            <TabsList className="mb-2">
+              <TabsTrigger value="blurry-champions">
                 Blurry Champions
-            </TabsTrigger>
-            <TabsTrigger value="spells-guessing">
+              </TabsTrigger>
+              <TabsTrigger value="spells-guessing">
               Spells Guessing
-            </TabsTrigger>
-            <TabsTrigger className="relative" value="objects-cost" disabled>
-              <Badge className="absolute -top-4 -right-4" variant="default">
+              </TabsTrigger>
+              <TabsTrigger className="relative" value="objects-cost" disabled>
+                <Badge className="absolute -top-4 -right-4 hidden sm:block" variant="default">
                 WIP
-              </Badge>
+                </Badge>
               Objects Cost
-            </TabsTrigger>
-          </TabsList>
+              </TabsTrigger>
+            </TabsList>
+          </div>
           <TabsContent value="blurry-champions">
             {blurryChampionsIsLoading && (<Skeleton className="rounded-md w-full h-6" />)}
             {blurryChampionsData && !blurryChampionsIsLoading && (

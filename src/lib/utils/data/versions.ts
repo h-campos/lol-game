@@ -34,5 +34,12 @@ export const versions = [
       "Responsive design.",
       "Fix issue on safari mobile, the champ was not blurred."
     ]
+  },
+  {
+    title: "v1.6.8",
+    logs: [
+      "Add the new game Spells Guessing.",
+      "Fix issue on score for every game."
+    ]
   }
 ];
