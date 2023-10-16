@@ -5,7 +5,7 @@ import type { SpellsEntity } from "@/config/types/championsData.type";
 
 export const getChampionsDataUrl = (champions: string[]): string => {
   const championsData = champions[randomSelect(champions)];
-  const url = `http://ddragon.leagueoflegends.com/cdn/13.20.1/data/en_US/champion/${championsData}.json`;
+  const url = `https://ddragon.leagueoflegends.com/cdn/13.20.1/data/en_US/champion/${championsData}.json`;
   return url;
 };
 
