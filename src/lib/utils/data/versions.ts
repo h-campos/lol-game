@@ -36,10 +36,16 @@ export const versions = [
     ]
   },
   {
-    title: "v1.6.8",
+    title: "v2.0.0",
     logs: [
-      "Add the new game Spells Guessing.",
-      "Fix issue on score for every game."
+      "Add the new game Spells Guessing."
+    ]
+  },
+  {
+    title: "v2.0.2",
+    logs: [
+      "Fix issue on score for every game.",
+      "Fix issue to set available all games after the last day the user played."
     ]
   }
 ];

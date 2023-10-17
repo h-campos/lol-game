@@ -185,6 +185,7 @@ const SpellsGuessing = (): ReactElement => {
     setResult("win");
     setChance(0);
     setShowSpellGuess(true);
+    localStorage.setItem("showSpellGuess", encode("true"));
     toast({
       title: "Well played",
       description: "Try to find the wich spell it is now in the card below the spell image.",
@@ -209,6 +210,7 @@ const SpellsGuessing = (): ReactElement => {
       localStorage.removeItem("answerSpell");
       localStorage.removeItem("attemptsSpellsGuessing");
       localStorage.removeItem("chanceSpellsGuessing");
+      localStorage.removeItem("showSpellGuess");
       toggleDialogGame(true);
       try {
         setIsLoading(true);
@@ -235,6 +237,7 @@ const SpellsGuessing = (): ReactElement => {
       localStorage.removeItem("answerSpell");
       localStorage.removeItem("attemptsSpellsGuessing");
       localStorage.removeItem("chanceSpellsGuessing");
+      localStorage.removeItem("showSpellGuess");
       try {
         setIsLoading(true);
         await disableGameForDayPlusOnePoint();
@@ -257,6 +260,7 @@ const SpellsGuessing = (): ReactElement => {
       localStorage.removeItem("answerSpell");
       localStorage.removeItem("attemptsSpellsGuessing");
       localStorage.removeItem("chanceSpellsGuessing");
+      localStorage.removeItem("showSpellGuess");
       try {
         setIsLoading(true);
         await disableGameForDay();
@@ -277,6 +281,14 @@ const SpellsGuessing = (): ReactElement => {
       setAnswerSpell(decode(localStorage.getItem("answerSpell") as string));
       setAnswerChampion(decode(localStorage.getItem("answerChampion") as string));
       setSpellImg(decode(localStorage.getItem("spellImg") as string));
+      if (localStorage.getItem("showSpellGuess")) {
+        if (decode(localStorage.getItem("showSpellGuess") as string) === "true") {
+          setShowSpellGuess(true);
+          setResult("win");
+        } else {
+          setShowSpellGuess(false);
+        }
+      }
       if (localStorage.getItem("attemptsSpellsGuessing") && localStorage.getItem("chanceSpellsGuessing")) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         setAttempts(JSON.parse(localStorage.getItem("attemptsSpellsGuessing") as string));
