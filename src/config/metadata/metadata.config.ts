@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     siteName: data.siteName,
     url: "https://lol-game.vercel.app/",
     type: "website",
-    images: ["/assets/metadate-preview.png"]
+    images: ["/assets/metadata-preview.png"]
   },
 
   twitter: {
