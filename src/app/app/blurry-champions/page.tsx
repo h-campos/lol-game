@@ -22,6 +22,7 @@ import { calculateScore } from "@/lib/utils/functions/calculateScore";
 import { useRouter } from "next/navigation";
 import { decode } from "@/lib/utils/functions/decode";
 import { encode } from "@/lib/utils/functions/encode";
+import { championsExist } from "@/lib/utils/functions/championsExist";
 
 const BlurryChampions = (): ReactElement => {
   const [animate, setAnimate] = useState<boolean>(false);
@@ -143,19 +144,27 @@ const BlurryChampions = (): ReactElement => {
     if (!input) throw new Error("Input is not defined");
     if (input.value === "") {
       toast({
-        title: "Error",
-        description: "You must enter a champion name",
+        title: "Oops.",
+        description: "You must enter a champion name.",
         variant: "default"
       });
       return;
     }
     const formattedInputValue = formatName(input.value);
-    setAttempts((current) => [...current, formattedInputValue]);
-    localStorage.setItem("attemptsBlurryChampions", JSON.stringify([...attempts, formattedInputValue]));
-    if (formattedInputValue === answerBlurredChampion) {
-      await playerWin();
+    if (championsExist(formattedInputValue)) {
+      setAttempts((current) => [...current, formattedInputValue]);
+      localStorage.setItem("attemptsBlurryChampions", JSON.stringify([...attempts, formattedInputValue]));
+      if (formattedInputValue === answerBlurredChampion) {
+        await playerWin();
+      } else {
+        await playerLoose();
+      }
     } else {
-      await playerLoose();
+      toast({
+        title: "Error",
+        description: "This champion doesn't exist",
+        variant: "default"
+      });
     }
     input.value = "";
   };

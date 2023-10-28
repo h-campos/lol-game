@@ -24,6 +24,7 @@ import { calculateScore } from "@/lib/utils/functions/calculateScore";
 import { useRouter } from "next/navigation";
 import { decode } from "@/lib/utils/functions/decode";
 import { encode } from "@/lib/utils/functions/encode";
+import { championsExist } from "@/lib/utils/functions/championsExist";
 
 const SpellsGuessing = (): ReactElement => {
   const setSpellImg = SpellsGuessingStore((state) => state.setSpellImg);
@@ -171,12 +172,20 @@ const SpellsGuessing = (): ReactElement => {
       return;
     }
     const formattedInputValue = formatName(input.value);
-    setAttempts((current) => [...current, formattedInputValue]);
-    localStorage.setItem("attemptsSpellsGuessing", JSON.stringify([...attempts, formattedInputValue]));
-    if (formattedInputValue === answerChampion) {
-      playerWinChampions();
+    if (championsExist(formattedInputValue)) {
+      setAttempts((current) => [...current, formattedInputValue]);
+      localStorage.setItem("attemptsSpellsGuessing", JSON.stringify([...attempts, formattedInputValue]));
+      if (formattedInputValue === answerChampion) {
+        playerWinChampions();
+      } else {
+        await playerLooseChampions();
+      }
     } else {
-      await playerLooseChampions();
+      toast({
+        title: "Error",
+        description: "This champion doesn't exist",
+        variant: "default"
+      });
     }
     input.value = "";
   };
