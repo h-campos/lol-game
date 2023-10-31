@@ -17,6 +17,7 @@ model User {
   blurryChampionsScore Int      @default(0)
   spellsGuessingScore  Int      @default(0)
   objectsCostScore     Int      @default(0)
+  guessProScore        Int      @default(0)
 }
 
 model Games {

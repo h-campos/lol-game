@@ -14,13 +14,52 @@ export const GET = async(): Promise<NextResponse> => {
     }
   });
 
+  const objectsCostAlreadyExist = await prisma.games.findFirst({
+    where: {
+      userId: user.id,
+      gameName: "Objects Cost"
+    }
+  });
+
   if (userGamesCount <= 2) {
     await prisma.games.create({
       data: {
         id: Math.random().toString(36).substring(7).toString(),
         gameName: "Objects Cost",
-        status: "wip",
+        status: "available",
         gamePath: "/app/objects-cost",
+        userId: user.id
+      }
+    });
+  }
+
+  if (userGamesCount <= 3) {
+    if (objectsCostAlreadyExist) {
+      await prisma.user.update({
+        where: {
+          id: user.id
+        },
+        data: {
+          Games: {
+            updateMany: {
+              where: { gameName: "Objects Cost" },
+              data: {
+                status: "available"
+              }
+            }
+          }
+        },
+        include: {
+          Games: true
+        }
+      });
+    }
+    await prisma.games.create({
+      data: {
+        id: Math.random().toString(36).substring(7).toString(),
+        gameName: "Guess Pro",
+        status: "wip",
+        gamePath: "/app/guess-pro",
         userId: user.id
       }
     });

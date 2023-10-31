@@ -41,7 +41,8 @@ export const GET = async(): Promise<NextResponse> => {
             where: {
               OR: [
                 { gameName: "Blurry Champions" },
-                { gameName: "Spells Guessing" }
+                { gameName: "Spells Guessing" },
+                { gameName: "Objects Cost" }
               ]
             },
             data: {
