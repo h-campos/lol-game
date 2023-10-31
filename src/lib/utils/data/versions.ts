@@ -42,10 +42,12 @@ export const versions = [
     ]
   },
   {
-    title: "v2.0.2",
+    title: "v2.1.2",
     logs: [
       "Fix issue on score for every game.",
-      "Fix issue to set available all games after the last day the user played."
+      "Fix issue to set available all games after the last day the user played.",
+      "Add missing champions on all games.",
+      "Now you cant type champion that doesnt exist on all the games."
     ]
   }
 ];

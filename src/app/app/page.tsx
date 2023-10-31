@@ -13,11 +13,11 @@ import type { Games, Prisma } from "@prisma/client";
 import { fetcher } from "@/lib/utils/database/fetcher";
 import { Skeleton } from "@/lib/components/ui/skeleton";
 import { Badge } from "@/lib/components/ui/badge";
-import { LeaderBoard } from "./_components/leaderboard";
-import { ColorsInformations } from "./_components/colorsInformations";
+import { LeaderBoard } from "./lib/leaderboard";
+import { ColorsInformations } from "./lib/colorsInformations";
 // import { Statistics } from "./_components/statistics";
 import { DialogReportProposal } from "@/lib/components/dialog-report-proposal/dialogReportProposal";
-import { ReportProposal } from "./_components/reportProposal";
+import { ReportProposal } from "./lib/reportProposal";
 
 type Props = Prisma.UserGetPayload<{
   include: { Games: true };
