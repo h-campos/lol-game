@@ -213,7 +213,7 @@ const SpellsGuessing = (): ReactElement => {
       setChance(0);
       setResult("loose");
       setTitleDialog("You loose");
-      setDescriptionDialog("You lost the game, you can now continue to play to the other games.");
+      setDescriptionDialog("You lost the game, you can now continue to play to the other games.  The champion was " + answerChampion + ".");
       localStorage.removeItem("answerChampion");
       localStorage.removeItem("spellImg");
       localStorage.removeItem("answerSpell");
