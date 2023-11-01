@@ -3,11 +3,11 @@ import { Badge } from "@/lib/components/ui/badge";
 import type { Component } from "@/lib/utils/component";
 import type { AttemptProps } from "./attempt.type";
 import type { ReactElement } from "react";
-import { AnswerBlurChampionStore } from "@/lib/utils/stores/answerBlurChampionStore";
+import { AnswerBlurChampionStore } from "@/lib/utils/stores/games/answerBlurChampionStore";
 import { formatName } from "@/lib/utils/functions/formatName";
 import { getChampionsAssetsWithName } from "@/lib/utils/functions/getChampionsAssets";
 import { champions } from "@/lib/utils/data-lol/champions";
-import { AnswerSpellsGuessingStore } from "@/lib/utils/stores/answerSpellsGuessingStore";
+import { AnswerSpellsGuessingStore } from "@/lib/utils/stores/games/answerSpellsGuessingStore";
 
 export const AttemptBlurryChampions: Component<AttemptProps> = ({ championName }): ReactElement => {
   const answerBlurredChampion = AnswerBlurChampionStore((state) => state.answerBlurredChampion);

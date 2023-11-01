@@ -3,8 +3,8 @@
 
 import { useEffect, type ReactElement, useRef, useState } from "react";
 import Image from "next/image";
-import { SpellsGuessingStore } from "@/lib/utils/stores/spellsGuessing";
-import { AnswerSpellsGuessingStore } from "@/lib/utils/stores/answerSpellsGuessingStore";
+import { SpellsGuessingStore } from "@/lib/utils/stores/games/spellsGuessing";
+import { AnswerSpellsGuessingStore } from "@/lib/utils/stores/games/answerSpellsGuessingStore";
 import { getChampionsDataUrl } from "@/lib/utils/functions/getChampionsData";
 import { champions } from "@/lib/utils/data-lol/champions";
 import { extractChampionNameData } from "@/lib/utils/functions/extractChampionName";
