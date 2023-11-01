@@ -5,7 +5,5 @@ export const ObjectsCostStore = create<ObjectsCostStoreType>((set) => ({
   itemImg: "",
   setItemImg: (itemImg) => set({ itemImg }),
   itemPrice: "",
-  setItemPrice: (itemPrice) => set({ itemPrice }),
-  itemName: "",
-  setItemName: (itemName) => set({ itemName })
+  setItemPrice: (itemPrice) => set({ itemPrice })
 }));
