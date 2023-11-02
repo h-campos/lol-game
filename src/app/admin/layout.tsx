@@ -19,7 +19,7 @@ const AdminLayout: Component<PropsWithChildren> = ({ children }) => {
 
   return (
     <>
-      <Navbar />
+      <Navbar isAdmin={true} />
       { children }
     </>
   );
