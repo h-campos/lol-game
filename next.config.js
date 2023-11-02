@@ -3,6 +3,7 @@ const nextConfig = {
   images: {
     domains: ['ddragon.leagueoflegends.com'],
   },
+  reactStrictMode: false,
 }
 
 module.exports = nextConfig

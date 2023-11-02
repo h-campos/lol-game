@@ -14,27 +14,14 @@ export const GET = async(): Promise<NextResponse> => {
     }
   });
 
-  const objectsCostAlreadyExist = await prisma.games.findFirst({
+  const isUserOutdated = await prisma.user.findUnique({
     where: {
-      userId: user.id,
-      gameName: "Objects Cost"
+      id: user.id
     }
   });
 
-  if (userGamesCount <= 2) {
-    await prisma.games.create({
-      data: {
-        id: Math.random().toString(36).substring(7).toString(),
-        gameName: "Objects Cost",
-        status: "available",
-        gamePath: "/app/objects-cost",
-        userId: user.id
-      }
-    });
-  }
-
-  if (userGamesCount <= 3) {
-    if (objectsCostAlreadyExist) {
+  if (isUserOutdated?.gamesUpdatedAt === "OUTDATED") {
+    if (userGamesCount === 3) {
       await prisma.user.update({
         where: {
           id: user.id
@@ -53,16 +40,24 @@ export const GET = async(): Promise<NextResponse> => {
           Games: true
         }
       });
+      await prisma.games.create({
+        data: {
+          id: Math.random().toString(36).substring(7).toString(),
+          gameName: "Guess Pro",
+          status: "wip",
+          gamePath: "/app/guess-pro",
+          userId: user.id
+        }
+      });
+      await prisma.user.update({
+        where: {
+          id: user.id
+        },
+        data: {
+          gamesUpdatedAt: "UPDATED"
+        }
+      });
     }
-    await prisma.games.create({
-      data: {
-        id: Math.random().toString(36).substring(7).toString(),
-        gameName: "Guess Pro",
-        status: "wip",
-        gamePath: "/app/guess-pro",
-        userId: user.id
-      }
-    });
   }
 
   return NextResponse.json(userGamesCount);
