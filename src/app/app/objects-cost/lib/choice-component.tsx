@@ -8,7 +8,7 @@ import type { PropsWithChildren, ReactElement } from "react";
 type Props = {
   choice: string;
   inputRef?: React.RefObject<HTMLInputElement>;
-  handleSubmit: (selectedPrice: string) => void;
+  handleSubmit: (selectedPrice: string) => Promise<void>;
   truePrice: string;
 }
 
@@ -24,7 +24,7 @@ const ChoiceComponent: Component<Props> = ({ choice, inputRef, handleSubmit, tru
               placeholder="Object price..."
             />
           </div>
-          <Button onClick={() => handleSubmit("null")}>Submit</Button>
+          <Button onClick={() => void handleSubmit("null")}>Submit</Button>
         </LayoutChoiceComponent>
       );
     case "4 choices": {
@@ -33,7 +33,7 @@ const ChoiceComponent: Component<Props> = ({ choice, inputRef, handleSubmit, tru
         <LayoutChoiceComponent>
           <div className="grid grid-cols-2 grid-rows-2 gap-2">
             {prices.map((price, idx) => (
-              <Button onClick={() => handleSubmit(price.toString())} key={idx} className="w-40">{price.toString()}</Button>
+              <Button onClick={() => void handleSubmit(price.toString())} key={idx} className="w-40">{price.toString()}</Button>
             ))}
           </div>
         </LayoutChoiceComponent>
@@ -45,7 +45,7 @@ const ChoiceComponent: Component<Props> = ({ choice, inputRef, handleSubmit, tru
         <LayoutChoiceComponent>
           <div className="grid grid-cols-2 grid-rows-1 gap-2">
             {prices.map((price, idx) => (
-              <Button onClick={() => handleSubmit(price.toString())} key={idx} className="w-40">{price.toString()}</Button>
+              <Button onClick={() => void handleSubmit(price.toString())} key={idx} className="w-40">{price.toString()}</Button>
             ))}
           </div>
         </LayoutChoiceComponent>
@@ -57,7 +57,7 @@ const ChoiceComponent: Component<Props> = ({ choice, inputRef, handleSubmit, tru
         <LayoutChoiceComponent>
           <div className="grid grid-cols-3 grid-rows-1 gap-2">
             {prices.map((price, idx) => (
-              <Button onClick={() => handleSubmit(price.toString())} key={idx} className="w-40">{price.toString()}</Button>
+              <Button onClick={() => void handleSubmit(price.toString())} key={idx} className="w-40">{price.toString()}</Button>
             ))}
           </div>
         </LayoutChoiceComponent>

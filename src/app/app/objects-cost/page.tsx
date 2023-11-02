@@ -14,6 +14,8 @@ import ChoiceComponent from "./lib/choice-component";
 import { useToast } from "@/lib/utils/hooks/use-toasts";
 import { DialogGameStore } from "@/lib/utils/stores/dialogGameStore";
 import { DialogGame } from "@/lib/components/dialog-game";
+import { useRouter } from "next/navigation";
+import { Skeleton } from "@/lib/components/ui/skeleton";
 
 const choiceOptions = ["No choice", "4 choices", "2 choices", "3 choices"];
 
@@ -28,37 +30,58 @@ const ObjectsCost = (): ReactElement => {
   const [titleDialog, setTitleDialog] = useState<string>("");
   const [descriptionDialog, setDescriptionDialog] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const router = useRouter();
 
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  const scoreWithChoiceSelected = (choice: number, result: string) => {
+    if (result === "win") {
+      if (choice === 0) {
+        return 5;
+      } else if (choice === 1) {
+        return 3;
+      } else if (choice === 2) {
+        return 1;
+      } else if (choice === 3) {
+        return 2;
+      }
+    } else if (result === "loose") {
+      return 0;
+    } else if (result === "") {
+      return 200;
+    }
+  };
 
-  useEffect(() => {
-    getItemsData().then((data) => {
-      const random = randomSelect(data);
-      setItemPrice(data[random].gold.total.toString());
-      setItemImg(data[random].image.full);
-    }).catch((error) => {
-      console.log(error);
+  const isGameAvailable = async(): Promise<void> => {
+    const response = await fetch("/api/gameIsAvailable", {
+      method: "POST",
+      body: JSON.stringify({
+        gameName: "Objects Cost"
+      }),
+      headers: { "Content-Type": "application/json" }
     });
-    toggleDialogGame(false);
-  }, []);
+    const data = await response.json() as string;
+    if (data === "unavailable") {
+      router.push("/app");
+      toast({
+        title: "Oops...",
+        description: "You already played this game today, please come back tomorow !",
+        variant: "default"
+      });
+    }
+  };
 
-  const handleSubmit = (selectedPrice = "null"): void => {
+  const handleSubmit = async(selectedPrice = "null"): Promise<void> => {
     const input = inputRef.current;
     if (input) {
       if (input.value !== "") {
         if (input.value.toString() == itemPrice.toString()) {
-          setResult("win");
-          setTitleDialog("Good job!");
-          setDescriptionDialog("You found the right price !");
-          toggleDialogGame(true);
+          await playerWin();
         } else {
           setAnimate(true);
           setTimeout(() => {
             setAnimate(false);
           }, 500);
-          setResult("loose");
-          setTitleDialog("You loose..");
-          setDescriptionDialog(`The right price was ${itemPrice} gold.`);
-          toggleDialogGame(true);
+          await playerLoose();
         }
       } else {
         toast({
@@ -71,22 +94,79 @@ const ObjectsCost = (): ReactElement => {
     }
     if (selectedPrice !== "null") {
       if (selectedPrice === itemPrice) {
-        setResult("win");
-        setTitleDialog("Good job!");
-        setDescriptionDialog("You found the right price !");
-        toggleDialogGame(true);
+        await playerWin();
       } else {
         setAnimate(true);
         setTimeout(() => {
           setAnimate(false);
         }, 500);
-        setResult("loose");
-        setTitleDialog("You loose..");
-        setDescriptionDialog(`The right price was ${itemPrice} gold.`);
-        toggleDialogGame(true);
+        await playerLoose();
       }
     }
   };
+
+  const disableGameForDay = async(result: string): Promise<void> => {
+    await fetch("/api/stateScoreObjectsCost", {
+      method: "POST",
+      body: JSON.stringify({
+        score: scoreWithChoiceSelected(choice, result)
+      }),
+      headers: { "Content-Type": "application/json" }
+    });
+  };
+
+  const playerWin = async(): Promise<void> => {
+    setResult("win");
+    setTitleDialog("Good job!");
+    setDescriptionDialog("You found the right price !");
+    toggleDialogGame(true);
+    try {
+      setIsLoading(true);
+      await disableGameForDay("win");
+      setIsLoading(false);
+    } catch (error) {
+      toggleDialogGame(false);
+      toast({
+        title: "Oops...",
+        description: "Something gone wrong, please contact the administrator.",
+        variant: "default"
+      });
+    }
+  };
+
+  const playerLoose = async(): Promise<void> => {
+    setResult("loose");
+    setTitleDialog("You loose..");
+    setDescriptionDialog(`The right price was ${itemPrice} gold.`);
+    toggleDialogGame(true);
+    try {
+      setIsLoading(true);
+      await disableGameForDay("loose");
+      setIsLoading(false);
+    } catch (error) {
+      toggleDialogGame(false);
+      toast({
+        title: "Oops...",
+        description: "Something gone wrong, please contact the administrator.",
+        variant: "default"
+      });
+    }
+  };
+
+  useEffect(() => {
+    getItemsData().then((data) => {
+      const random = randomSelect(data);
+      setItemPrice(data[random].gold.total.toString());
+      setItemImg(data[random].image.full);
+    }).catch((error) => {
+      console.log(error);
+    });
+  }, [setItemImg, setItemPrice]);
+
+  useEffect(() => {
+    toggleDialogGame(false);
+    void isGameAvailable();
+  }, []);
 
   return (
     <div className="md:w-2/4 w-full flex flex-col gap-2">
@@ -114,12 +194,17 @@ const ObjectsCost = (): ReactElement => {
               )
             }
             >
-              <Image
-                src={`https://ddragon.leagueoflegends.com/cdn/13.21.1/img/item/${itemImg}`}
-                width={150}
-                height={150}
-                alt="item-img"
-              />
+              {!itemImg && (
+                <Skeleton className="w-[150px] h-[150px]" />
+              )}
+              {itemImg && (
+                <Image
+                  src={`https://ddragon.leagueoflegends.com/cdn/13.21.1/img/item/${itemImg}`}
+                  width={150}
+                  height={150}
+                  alt="item-img"
+                />
+              )}
             </div>
             <ChoiceComponent choice={choiceOptions[choice]} inputRef={inputRef} handleSubmit={handleSubmit} truePrice={itemPrice} />
           </div>

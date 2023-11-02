@@ -14,6 +14,8 @@ export const POST = async(req: NextRequest): Promise<NextResponse> => {
   if (!user) return new NextResponse(JSON.stringify({ error: "You are not authorized." }), { status: 401 });
   const body: RequestBody = await req.json() as RequestBody;
 
+  console.log(body.score);
+
   await prisma.user.update({
     where: {
       id: user.id
