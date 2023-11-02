@@ -31,6 +31,10 @@ model Games {
 }
 
 model Proposal {
-  id      String @id @default(cuid())
-  message String
+  id       String @id @default(cuid())
+  username String @default("anonymous")
+  mail     String @default("anonymous")
+  message  String @default("No message")
+  status   String @default("To be reviewed")
+  userId   String @default("anonymous")
 }
