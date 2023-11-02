@@ -16,6 +16,8 @@ import { DialogGameStore } from "@/lib/utils/stores/dialogGameStore";
 import { DialogGame } from "@/lib/components/dialog-game";
 import { useRouter } from "next/navigation";
 import { Skeleton } from "@/lib/components/ui/skeleton";
+import { encode } from "@/lib/utils/functions/encode";
+import { decode } from "@/lib/utils/functions/decode";
 
 const choiceOptions = ["No choice", "4 choices", "2 choices", "3 choices"];
 
@@ -120,6 +122,9 @@ const ObjectsCost = (): ReactElement => {
     setTitleDialog("Good job!");
     setDescriptionDialog("You found the right price !");
     toggleDialogGame(true);
+    localStorage.removeItem("itemPrice");
+    localStorage.removeItem("itemImg");
+    localStorage.removeItem("choice");
     try {
       setIsLoading(true);
       await disableGameForDay("win");
@@ -139,6 +144,9 @@ const ObjectsCost = (): ReactElement => {
     setTitleDialog("You loose..");
     setDescriptionDialog(`The right price was ${itemPrice} gold.`);
     toggleDialogGame(true);
+    localStorage.removeItem("itemPrice");
+    localStorage.removeItem("itemImg");
+    localStorage.removeItem("choice");
     try {
       setIsLoading(true);
       await disableGameForDay("loose");
@@ -154,13 +162,24 @@ const ObjectsCost = (): ReactElement => {
   };
 
   useEffect(() => {
-    getItemsData().then((data) => {
-      const random = randomSelect(data);
-      setItemPrice(data[random].gold.total.toString());
-      setItemImg(data[random].image.full);
-    }).catch((error) => {
-      console.log(error);
-    });
+    if (localStorage.getItem("itemPrice") && localStorage.getItem("itemImg")) {
+      setItemPrice(decode(localStorage.getItem("itemPrice") as string));
+      setItemImg(decode(localStorage.getItem("itemImg") as string));
+      if (localStorage.getItem("choice")) {
+        setChoice(Number(decode(localStorage.getItem("choice") as string)));
+      }
+      return;
+    } else {
+      getItemsData().then((data) => {
+        const random = randomSelect(data);
+        setItemPrice(data[random].gold.total.toString());
+        localStorage.setItem("itemPrice", encode(data[random].gold.total.toString()));
+        setItemImg(data[random].image.full);
+        localStorage.setItem("itemImg", encode(data[random].image.full));
+      }).catch((error) => {
+        console.log(error);
+      });
+    }
   }, [setItemImg, setItemPrice]);
 
   useEffect(() => {
@@ -178,7 +197,7 @@ const ObjectsCost = (): ReactElement => {
             <span className="font-bold text-titleHighlight"> ObjectsCost</span>
           </CardTitle>
           <CardDescription>
-            TODO: Add description game
+          This game presents you with an image of an item, and you need to select an option to try and win points. Each option you choose will earn you a different amount of points based on your selection. But be cautious, you only have one chance to play, and the items can be either old or recent. Good luck!
           </CardDescription>
         </CardHeader>
       </Card>
@@ -224,7 +243,10 @@ const ObjectsCost = (): ReactElement => {
           <CardContent className="pt-6">
             <div className="grid grid-cols-2 grid-rows-2 gap-2">
               {choiceOptions.map((choice, idx) => (
-                <Button onClick={() => setChoice(idx)} key={idx}>{choice}</Button>
+                <Button onClick={() => {
+                  setChoice(idx);
+                  localStorage.setItem("choice", encode(idx.toString()));
+                }} key={idx}>{choice}</Button>
               ))}
             </div>
           </CardContent>
