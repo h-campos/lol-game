@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client";
 
-import type { ReactElement } from "react";
 import { Button } from "@/lib/components/ui/button";
 import {
   DropdownMenu,
@@ -23,12 +22,14 @@ import type { Games, Prisma } from "@prisma/client";
 import { fetcher } from "@/lib/utils/database/fetcher";
 import { DialogReportProposalStore } from "@/lib/utils/stores/dialogReportProposalStore";
 import { SheetChangelogStore } from "@/lib/utils/stores/sheetChangelogStore";
+import type { NavbarMenuProps } from "./navbar-menu.type";
+import type { Component } from "@/lib/utils/component";
 
 type Props = Prisma.UserGetPayload<{
   include: { Games: true };
 }>
 
-export const NavbarMenu = (): ReactElement => {
+export const NavbarMenu: Component<NavbarMenuProps> = ({ isAdmin }) => {
   const supabase = createClientComponentClient();
   const { user, setUser } = useUserContext();
   const { data, isLoading } = useSwr<Props>("/api/showGamesButton", fetcher);
@@ -78,20 +79,24 @@ export const NavbarMenu = (): ReactElement => {
           )}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem onClick={toggle}>
+        {!isAdmin && (
+          <>
+            <DropdownMenuGroup>
+              <DropdownMenuItem onClick={toggle}>
             Report / Proposal
-          </DropdownMenuItem>
-          <Link target="_blank" href={"https://github.com/Sakoutecher/lol-game"}>
-            <DropdownMenuItem>
+              </DropdownMenuItem>
+              <Link target="_blank" href={"https://github.com/Sakoutecher/lol-game"}>
+                <DropdownMenuItem>
             Github repo
-            </DropdownMenuItem>
-          </Link>
-          <DropdownMenuItem onClick={toggleChangelog}>
+                </DropdownMenuItem>
+              </Link>
+              <DropdownMenuItem onClick={toggleChangelog}>
             Changelog
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+          </>
+        )}
         <DropdownMenuItem onClick={() => {
           void supabase.auth.signOut().then(() => {
             setUser(null);

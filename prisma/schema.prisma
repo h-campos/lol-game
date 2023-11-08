@@ -13,10 +13,12 @@ model User {
   username             String?
   lastDayPlayed        DateTime @updatedAt
   Games                Games[]
+  gamesUpdatedAt       String   @default("OUTDATED")
   timeLeft             Int      @default(0)
   blurryChampionsScore Int      @default(0)
   spellsGuessingScore  Int      @default(0)
   objectsCostScore     Int      @default(0)
+  guessProScore        Int      @default(0)
 }
 
 model Games {
@@ -29,6 +31,10 @@ model Games {
 }
 
 model Proposal {
-  id      String @id @default(cuid())
-  message String
+  id       String @id @default(cuid())
+  username String @default("anonymous")
+  mail     String @default("anonymous")
+  message  String @default("No message")
+  status   String @default("To be reviewed")
+  userId   String @default("anonymous")
 }

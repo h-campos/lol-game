@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "User" ADD COLUMN     "gamesUpdatedAt" TEXT NOT NULL DEFAULT 'OUTDATED';

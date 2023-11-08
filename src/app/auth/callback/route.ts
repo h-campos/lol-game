@@ -21,6 +21,7 @@ export const GET = async(request: NextRequest): Promise<NextResponse> => {
         email: resp.data.user?.email ?? "",
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         username: resp.data.user?.user_metadata.custom_claims?.global_name as string ?? "",
+        gamesUpdatedAt: "UPDATED",
         Games: {
           create: [
             {
@@ -38,8 +39,14 @@ export const GET = async(request: NextRequest): Promise<NextResponse> => {
             {
               id: Math.random().toString(36).substring(7).toString(),
               gameName: "Objects Cost",
-              status: "wip",
+              status: "available",
               gamePath: "/app/objects-cost"
+            },
+            {
+              id: Math.random().toString(36).substring(7).toString(),
+              gameName: "Guess Pro",
+              status: "wip",
+              gamePath: "/app/guess-pro"
             }
           ]
         }
