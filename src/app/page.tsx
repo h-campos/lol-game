@@ -16,6 +16,8 @@ type Props = {
  userCountPlayed: number;
 }
 
+//TODO: continue project
+
 const Home = (): ReactElement => {
   const supabase = createClientComponentClient();
   const { user } = useUserContext();
